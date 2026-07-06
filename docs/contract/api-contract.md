@@ -108,7 +108,6 @@ Legend: 🌱 planned · 🚧 in progress · ✅ shipped (shape documented).
 | `PATCH` | `/phone-numbers/{phoneNumber}/business-profile` | edit profile | 🌱 |
 | `PATCH` | `/phone-numbers/{phoneNumber}/display-name` | change display name | 🌱 |
 | `POST` | `/phone-numbers/{phoneNumber}/oba` | request Official Business Account | 🌱 |
-| `POST/DELETE` | `/phone-numbers/{phoneNumber}/users` | assign/unassign host users | 🌱 |
 
 ---
 
@@ -469,40 +468,6 @@ Apply for an Official Business Account (green tick).
 
 **Errors** — `409` if the current `oba.status` doesn't allow a new application (e.g.
 `UNDER_REVIEW`).
-
----
-
-#### `POST/DELETE /phone-numbers/{phoneNumber}/users`
-
-Assign or unassign host users to a number (the pivot). Inert (`404`/no-op) when
-`config('whatsapp-account.models.user')` is `null`.
-
-**Assign — Request**
-
-```http
-POST /api/whatsapp/phone-numbers/106540352242922/users
-```
-
-```json
-{ "user_id": 7 }
-```
-
-**Unassign — Request**
-
-```http
-DELETE /api/whatsapp/phone-numbers/106540352242922/users
-```
-
-```json
-{ "user_id": 7 }
-```
-
-| Field | Rules |
-|---|---|
-| `user_id` | required, exists on the configured user model |
-
-**Response** `200 OK` — `{ "data": WhatsAppPhoneNumberResource }` with the refreshed
-`users` array.
 
 ---
 
