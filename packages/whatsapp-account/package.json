@@ -15,8 +15,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch"
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch & tsc-alias -p tsconfig.json --watch"
   },
   "publishConfig": {
     "access": "public"
@@ -29,6 +29,14 @@
     "@types/react": "^19.0.0",
     "axios": "^1.7.0",
     "react": "^19.2.0",
+    "tsc-alias": "^1.8.10",
     "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.575.0",
+    "radix-ui": "^1.6.1",
+    "tailwind-merge": "^3.4.0"
   }
 }
