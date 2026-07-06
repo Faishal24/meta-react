@@ -30,3 +30,6 @@ export type {
   UsePhoneNumberActions,
   UsePhoneNumberActionsOptions,
 } from './usePhoneNumberActions';
+
+export { useBusinessProfileForm } from './useBusinessProfileForm';
+export type { UseBusinessProfileFormOptions } from './useBusinessProfileForm';

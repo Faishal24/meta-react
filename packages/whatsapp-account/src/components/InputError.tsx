@@ -1,0 +1,13 @@
+import { cn } from '../lib/utils';
+
+export interface InputErrorProps {
+  message?: string;
+  className?: string;
+}
+
+export function InputError({ message, className }: InputErrorProps) {
+  if (!message) {
+    return null;
+  }
+  return <p className={cn('text-sm text-destructive', className)}>{message}</p>;
+}
