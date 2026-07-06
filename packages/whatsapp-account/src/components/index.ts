@@ -30,3 +30,6 @@ export type { DisplayNameFormProps } from './business-profile/DisplayNameForm';
 
 export { SummaryCard } from './business-profile/SummaryCard';
 export type { SummaryCardProps } from './business-profile/SummaryCard';
+
+export { PhoneNumberDetail } from './PhoneNumberDetail';
+export type { PhoneNumberDetailProps } from './PhoneNumberDetail';
