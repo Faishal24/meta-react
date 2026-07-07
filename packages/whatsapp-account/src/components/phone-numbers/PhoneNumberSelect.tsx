@@ -1,13 +1,13 @@
-import { type WhatsAppAccountClientConfig } from '../client';
-import { usePhoneNumbers } from '../hooks';
-import { type WhatsAppPhoneNumber } from '../types';
+import { type WhatsAppAccountClientConfig } from '../../client';
+import { usePhoneNumbers } from '../../hooks';
+import { type WhatsAppPhoneNumber } from '../../types';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './ui/select';
+} from '../ui/select';
 
 export interface PhoneNumberSelectProps extends WhatsAppAccountClientConfig {
   /** The currently selected `phone_number_id`, or null when none is chosen. */

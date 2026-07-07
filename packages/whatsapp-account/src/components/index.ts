@@ -10,11 +10,11 @@
 export { BusinessAccountList } from './BusinessAccountList';
 export type { BusinessAccountListProps } from './BusinessAccountList';
 
-export { PhoneNumberSelect } from './PhoneNumberSelect';
-export type { PhoneNumberSelectProps } from './PhoneNumberSelect';
+export { PhoneNumberSelect } from './phone-numbers/PhoneNumberSelect';
+export type { PhoneNumberSelectProps } from './phone-numbers/PhoneNumberSelect';
 
-export { SectionCard } from './business-profile/SectionCard';
-export type { SectionCardProps } from './business-profile/SectionCard';
+export { SectionCard } from './SectionCard';
+export type { SectionCardProps } from './SectionCard';
 
 export { InputError } from './InputError';
 export type { InputErrorProps } from './InputError';
@@ -34,11 +34,11 @@ export type { SummaryCardProps } from './business-profile/SummaryCard';
 export { ObaForm } from './business-profile/ObaForm';
 export type { ObaFormProps } from './business-profile/ObaForm';
 
-export { TwoStepPinForm } from './TwoStepPinForm';
-export type { TwoStepPinFormProps } from './TwoStepPinForm';
+export { TwoStepPinForm } from './phone-numbers/TwoStepPinForm';
+export type { TwoStepPinFormProps } from './phone-numbers/TwoStepPinForm';
 
 export { OnboardingButton } from './OnboardingButton';
 export type { OnboardingButtonProps } from './OnboardingButton';
 
-export { PhoneNumberDetail } from './PhoneNumberDetail';
-export type { PhoneNumberDetailProps } from './PhoneNumberDetail';
+export { PhoneNumberDetail } from './phone-numbers/PhoneNumberDetail';
+export type { PhoneNumberDetailProps } from './phone-numbers/PhoneNumberDetail';

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import { type WhatsAppAccountClientConfig } from '../client';
-import { usePhoneNumberActions } from '../hooks';
-import { type WhatsAppPhoneNumber } from '../types';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { InputError } from './InputError';
+import { type WhatsAppAccountClientConfig } from '../../client';
+import { usePhoneNumberActions } from '../../hooks';
+import { type WhatsAppPhoneNumber } from '../../types';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { InputError } from '../InputError';
 
 export interface TwoStepPinFormProps extends WhatsAppAccountClientConfig {
   phoneNumberId: string;

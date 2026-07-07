@@ -1,13 +1,13 @@
 import { AtSign } from 'lucide-react';
 
-import { type WhatsAppAccountClientConfig } from '../client';
-import { useBusinessProfileForm, usePhoneNumber } from '../hooks';
-import { type BusinessProfile, type WhatsAppPhoneNumber } from '../types';
-import { BusinessProfileForm, type VerticalOption } from './business-profile/BusinessProfileForm';
-import { DisplayNameForm } from './business-profile/DisplayNameForm';
-import { SectionCard } from './business-profile/SectionCard';
-import { SummaryCard } from './business-profile/SummaryCard';
-import { Skeleton } from './ui/skeleton';
+import { type WhatsAppAccountClientConfig } from '../../client';
+import { useBusinessProfileForm, usePhoneNumber } from '../../hooks';
+import { type BusinessProfile, type WhatsAppPhoneNumber } from '../../types';
+import { BusinessProfileForm, type VerticalOption } from '../business-profile/BusinessProfileForm';
+import { DisplayNameForm } from '../business-profile/DisplayNameForm';
+import { SectionCard } from '../SectionCard';
+import { SummaryCard } from '../business-profile/SummaryCard';
+import { Skeleton } from '../ui/skeleton';
 
 export interface PhoneNumberDetailProps extends WhatsAppAccountClientConfig {
   phoneNumberId: string;
