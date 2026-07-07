@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { resolveClient, type WhatsAppAccountClientConfig } from '../client';
+import { resolveClient, type MetaAccountClientConfig } from '../client';
 import { type Paginated, type WhatsAppPhoneNumber } from '../types';
 
-export interface UsePhoneNumbersOptions extends WhatsAppAccountClientConfig {
+export interface UsePhoneNumbersOptions extends MetaAccountClientConfig {
   page?: number;
 }
 

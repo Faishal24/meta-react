@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import { type WhatsAppAccountClientConfig } from '../../client';
+import { type MetaAccountClientConfig } from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
 import { type WhatsAppPhoneNumber } from '../../types';
 import { Switch } from '../ui/switch';
 
-export interface IdentityKeyCheckFormProps extends WhatsAppAccountClientConfig {
+export interface IdentityKeyCheckFormProps extends MetaAccountClientConfig {
   phoneNumberId: string;
   /** Current identity-key-check state (from settings.identity_key_check). */
   enabled: boolean;

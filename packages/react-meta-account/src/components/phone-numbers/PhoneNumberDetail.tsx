@@ -1,6 +1,6 @@
 import { AtSign } from 'lucide-react';
 
-import { type WhatsAppAccountClientConfig } from '../../client';
+import { type MetaAccountClientConfig } from '../../client';
 import { useBusinessProfileForm, usePhoneNumber } from '../../hooks';
 import { type BusinessProfile, type WhatsAppPhoneNumber } from '../../types';
 import { BusinessProfileForm, type VerticalOption } from '../business-profile/BusinessProfileForm';
@@ -9,7 +9,7 @@ import { SectionCard } from '../SectionCard';
 import { SummaryCard } from '../business-profile/SummaryCard';
 import { Skeleton } from '../ui/skeleton';
 
-export interface PhoneNumberDetailProps extends WhatsAppAccountClientConfig {
+export interface PhoneNumberDetailProps extends MetaAccountClientConfig {
   phoneNumberId: string;
   verticals: VerticalOption[];
   /** Whether the WABA's business is verified (drives the OBA readiness stage). */
@@ -32,7 +32,7 @@ interface DetailBodyProps {
   phoneNumber: WhatsAppPhoneNumber;
   verticals: VerticalOption[];
   businessVerified: boolean;
-  clientConfig: WhatsAppAccountClientConfig;
+  clientConfig: MetaAccountClientConfig;
   onUpdated?: (phoneNumber: WhatsAppPhoneNumber) => void;
 }
 

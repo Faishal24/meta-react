@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { resolveClient, type WhatsAppAccountClientConfig } from '../client';
+import { resolveClient, type MetaAccountClientConfig } from '../client';
 import { type WhatsAppPhoneNumber } from '../types';
 
-export interface UsePhoneNumberOptions extends WhatsAppAccountClientConfig {
+export interface UsePhoneNumberOptions extends MetaAccountClientConfig {
   /** null/undefined keeps the hook idle (no request) — e.g. before a selection. */
   phoneNumberId?: string | null;
 }

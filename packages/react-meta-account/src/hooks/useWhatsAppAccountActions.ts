@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 import axios from 'axios';
 
-import { resolveClient, type WhatsAppAccountClientConfig } from '../client';
+import { resolveClient, type MetaAccountClientConfig } from '../client';
 import { type WhatsAppAccount } from '../types';
 
 export interface UseWhatsAppAccountActionsOptions
-  extends WhatsAppAccountClientConfig {
+  extends MetaAccountClientConfig {
   /** The `waba_id` all actions target. */
   wabaId: string;
   onSuccess?: (account: WhatsAppAccount) => void;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { type WhatsAppAccountClientConfig } from '../../client';
+import { type MetaAccountClientConfig } from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
 import {
   type DisplayNameInfo,
@@ -12,7 +12,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { InputError } from '../InputError';
 
-export interface DisplayNameFormProps extends WhatsAppAccountClientConfig {
+export interface DisplayNameFormProps extends MetaAccountClientConfig {
   phoneNumberId: string;
   verifiedName: string | null;
   nameStatus: string | null;

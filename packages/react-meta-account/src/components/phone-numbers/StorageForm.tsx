@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { type WhatsAppAccountClientConfig } from '../../client';
+import { type MetaAccountClientConfig } from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
 import {
   type StorageStatus,
@@ -23,7 +23,7 @@ export interface RegionOption {
   label: string;
 }
 
-export interface StorageFormProps extends WhatsAppAccountClientConfig {
+export interface StorageFormProps extends MetaAccountClientConfig {
   phoneNumberId: string;
   /** Current storage config (from settings.storage). */
   status?: StorageStatus;

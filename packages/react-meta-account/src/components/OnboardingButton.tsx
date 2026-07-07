@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 import { Plus } from 'lucide-react';
 
-import { type WhatsAppAccountClientConfig } from '../client';
+import { type MetaAccountClientConfig } from '../client';
 import { useOnboarding } from '../hooks';
 import {
   type WhatsAppAccount,
@@ -9,7 +9,7 @@ import {
 } from '../types';
 import { Button } from './ui/button';
 
-export interface OnboardingButtonProps extends WhatsAppAccountClientConfig {
+export interface OnboardingButtonProps extends MetaAccountClientConfig {
   /**
    * `onboarding` runs first-time signup (creates the WABA + first number);
    * `add-number` adds a subsequent number to an existing WABA.

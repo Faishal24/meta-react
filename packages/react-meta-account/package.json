@@ -1,7 +1,7 @@
 {
-  "name": "@officemap/whatsapp-account",
+  "name": "@officemap/react-meta-account",
   "version": "0.1.0",
-  "description": "WhatsApp Business account management components for OfficeMap: embedded signup onboarding, WABA, and phone number management.",
+  "description": "Meta WhatsApp account management components: embedded signup onboarding, WABA, and phone number management.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

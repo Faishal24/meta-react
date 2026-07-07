@@ -110,7 +110,7 @@ importers:
         specifier: ^1.29.1
         version: 1.32.0
 
-  packages/whatsapp-account:
+  packages/react-meta-account:
     dependencies:
       class-variance-authority:
         specifier: ^0.7.1

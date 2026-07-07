@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-import { type WhatsAppAccountClientConfig } from '../../client';
+import { type MetaAccountClientConfig } from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
 import { type WhatsAppPhoneNumber } from '../../types';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { InputError } from '../InputError';
 
-export interface TwoStepPinFormProps extends WhatsAppAccountClientConfig {
+export interface TwoStepPinFormProps extends MetaAccountClientConfig {
   phoneNumberId: string;
   /** Whether a PIN is already set (from the number's has_pin), to label the action Set vs Update. */
   hasPin?: boolean;

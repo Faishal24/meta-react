@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 import { CloudSync, LoaderCircle } from 'lucide-react';
 
-import { type WhatsAppAccountClientConfig } from '../client';
+import { type MetaAccountClientConfig } from '../client';
 import { useBusinessAccounts } from '../hooks';
 import { type WhatsAppAccount } from '../types';
 import { Badge } from './ui/badge';
@@ -21,7 +21,7 @@ import {
   reviewStatusDisplay,
 } from '../lib/status-config';
 
-export interface BusinessAccountListProps extends WhatsAppAccountClientConfig {
+export interface BusinessAccountListProps extends MetaAccountClientConfig {
   page?: number;
   onSelect?: (businessAccount: WhatsAppAccount) => void;
   /** Omit to hide the sync column. `syncingId` marks the row currently syncing. */

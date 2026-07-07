@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { type WhatsAppAccountClientConfig } from '../client';
+import { type MetaAccountClientConfig } from '../client';
 import {
   type BusinessProfile,
   type UpdateBusinessProfilePayload,
@@ -8,7 +8,7 @@ import {
 } from '../types';
 import { usePhoneNumberActions } from './usePhoneNumberActions';
 
-export interface UseBusinessProfileFormOptions extends WhatsAppAccountClientConfig {
+export interface UseBusinessProfileFormOptions extends MetaAccountClientConfig {
   phoneNumberId: string;
   profile: BusinessProfile;
   onSuccess?: (phoneNumber: WhatsAppPhoneNumber) => void;

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import axios from 'axios';
 
-import { resolveClient, type WhatsAppAccountClientConfig } from '../client';
+import { resolveClient, type MetaAccountClientConfig } from '../client';
 import {
   type ObaApplicationPayload,
   type UpdateBusinessProfilePayload,
@@ -13,7 +13,7 @@ import {
   type WhatsAppPhoneNumber,
 } from '../types';
 
-export interface UsePhoneNumberActionsOptions extends WhatsAppAccountClientConfig {
+export interface UsePhoneNumberActionsOptions extends MetaAccountClientConfig {
   phoneNumberId: string;
   onSuccess?: (phoneNumber: WhatsAppPhoneNumber) => void;
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { type WhatsAppAccountClientConfig } from '../../client';
+import { type MetaAccountClientConfig } from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
 import { obaStatusDisplay } from '../../lib/status-config';
 import { type WhatsAppPhoneNumber } from '../../types';
@@ -11,7 +11,7 @@ import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { InputError } from '../InputError';
 
-export interface ObaFormProps extends WhatsAppAccountClientConfig {
+export interface ObaFormProps extends MetaAccountClientConfig {
   phoneNumberId: string;
   obaStatus: string;
   businessVerified: boolean;

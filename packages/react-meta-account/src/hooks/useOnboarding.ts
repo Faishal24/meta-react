@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-import { resolveClient, type WhatsAppAccountClientConfig } from '../client';
+import { resolveClient, type MetaAccountClientConfig } from '../client';
 import {
   isFacebookOrigin,
   launchEmbeddedSignup,
@@ -15,7 +15,7 @@ import {
   type WhatsAppPhoneNumber,
 } from '../types';
 
-export interface UseOnboardingOptions extends WhatsAppAccountClientConfig {
+export interface UseOnboardingOptions extends MetaAccountClientConfig {
   onOnboarded?: (businessAccount: WhatsAppAccount) => void;
   onPhoneNumberAdded?: (phoneNumber: WhatsAppPhoneNumber) => void;
 }

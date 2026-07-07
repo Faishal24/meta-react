@@ -1,6 +1,6 @@
 import axios, { type AxiosInstance } from 'axios';
 
-export interface WhatsAppAccountClientConfig {
+export interface MetaAccountClientConfig {
   /** Backend route prefix, matching `config('whatsapp.route.prefix')`. Default: `api/whatsapp`. */
   baseUrl?: string;
   /** Defaults to the global axios, inheriting any auth interceptors the host set up. */
@@ -15,7 +15,7 @@ export interface ResolvedClient {
 }
 
 export function resolveClient(
-  config: WhatsAppAccountClientConfig = {},
+  config: MetaAccountClientConfig = {},
 ): ResolvedClient {
   const instance = config.axios ?? axios;
   const baseUrl = (config.baseUrl ?? DEFAULT_BASE_URL).replace(/\/+$/, '');

@@ -1,6 +1,6 @@
 import { Database, KeyRound, RefreshCw, ShieldCheck } from 'lucide-react';
 
-import { type WhatsAppAccountClientConfig } from '../../client';
+import { type MetaAccountClientConfig } from '../../client';
 import { usePhoneNumber, usePhoneNumberActions } from '../../hooks';
 import { type WhatsAppPhoneNumber } from '../../types';
 import { SectionCard } from '../SectionCard';
@@ -21,7 +21,7 @@ import { IdentityKeyCheckForm } from './IdentityKeyCheckForm';
 import { StorageForm, type RegionOption } from './StorageForm';
 import { TwoStepPinForm } from './TwoStepPinForm';
 
-export interface PhoneNumberManagementProps extends WhatsAppAccountClientConfig {
+export interface PhoneNumberManagementProps extends MetaAccountClientConfig {
   phoneNumberId: string;
   /** Regions offered when configuring in-country storage. */
   regions: RegionOption[];
@@ -30,7 +30,7 @@ export interface PhoneNumberManagementProps extends WhatsAppAccountClientConfig 
 
 interface RegistrationSectionProps {
   number: WhatsAppPhoneNumber;
-  clientConfig: WhatsAppAccountClientConfig;
+  clientConfig: MetaAccountClientConfig;
   onUpdated?: (phoneNumber: WhatsAppPhoneNumber) => void;
 }
 
@@ -91,7 +91,7 @@ function RegistrationSection({ number, clientConfig, onUpdated }: RegistrationSe
 interface ManagementBodyProps {
   number: WhatsAppPhoneNumber;
   regions: RegionOption[];
-  clientConfig: WhatsAppAccountClientConfig;
+  clientConfig: MetaAccountClientConfig;
   onUpdated?: (phoneNumber: WhatsAppPhoneNumber) => void;
 }
 

@@ -1,12 +1,12 @@
 import { type ReactNode } from 'react';
 import { LoaderCircle, RefreshCw } from 'lucide-react';
 
-import { type WhatsAppAccountClientConfig } from '../client';
+import { type MetaAccountClientConfig } from '../client';
 import { useWhatsAppAccountActions } from '../hooks';
 import { type WhatsAppAccount } from '../types';
 import { Button } from './ui/button';
 
-export interface RefreshTokenButtonProps extends WhatsAppAccountClientConfig {
+export interface RefreshTokenButtonProps extends MetaAccountClientConfig {
   wabaId: string;
   /** Disabled when there is no token to refresh. */
   tokenStatus?: string;
