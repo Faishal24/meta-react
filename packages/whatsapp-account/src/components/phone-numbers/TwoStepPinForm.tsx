@@ -9,14 +9,14 @@ import { InputError } from '../InputError';
 
 export interface TwoStepPinFormProps extends WhatsAppAccountClientConfig {
   phoneNumberId: string;
-  /** Whether a PIN is already set, to label the action Set vs Update. */
-  pinSet?: boolean;
+  /** Whether a PIN is already set (from the number's has_pin), to label the action Set vs Update. */
+  hasPin?: boolean;
   onSuccess?: (phoneNumber: WhatsAppPhoneNumber) => void;
 }
 
 export function TwoStepPinForm({
   phoneNumberId,
-  pinSet = false,
+  hasPin = false,
   onSuccess,
   ...clientConfig
 }: TwoStepPinFormProps) {
@@ -38,7 +38,7 @@ export function TwoStepPinForm({
           onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))}
         />
         <Button disabled={actions.isProcessing || pin.length !== 6} onClick={submit}>
-          {pinSet ? 'Update' : 'Set PIN'}
+          {hasPin ? 'Update' : 'Set PIN'}
         </Button>
       </div>
       {actions.errors?.pin?.[0] && <InputError message={actions.errors.pin[0]} />}

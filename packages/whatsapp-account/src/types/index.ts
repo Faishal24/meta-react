@@ -10,10 +10,12 @@
 /** Derived token health on the WABA resource. */
 export type TokenStatus = 'no_token' | 'expired' | 'expiring_soon' | 'valid';
 
-export interface Company {
+/** The tenant — a Meta business portfolio. */
+export interface BusinessPortfolio {
   id: number;
-  name: string;
   business_portfolio_id: string;
+  name: string;
+  verification_status: string | null;
 }
 
 /** Projected from phone number metadata; part of WhatsAppPhoneNumber. */
@@ -28,7 +30,7 @@ export interface BusinessProfile {
   synced_at: string | null;
 }
 
-export interface WhatsAppBusinessAccount {
+export interface WhatsAppAccount {
   id: number;
   waba_id: string;
   name: string;
@@ -42,11 +44,14 @@ export interface WhatsAppBusinessAccount {
   business_verification_status: string | null;
   account_review_status: string | null;
   health_status: Record<string, unknown> | null;
+  created_at: string | null;
+  updated_at: string | null;
   phone_numbers?: WhatsAppPhoneNumber[];
 }
 
 export interface WhatsAppPhoneNumber {
   id: number;
+  whatsapp_account_id: number;
   phone_number_id: string;
   display_phone_number: string;
   verified_name: string | null;
@@ -56,15 +61,12 @@ export interface WhatsAppPhoneNumber {
   throughput_level: string | null;
   code_verification_status: string | null;
   status: string;
+  has_pin: boolean;
   registered_at: string | null;
   business_profile?: BusinessProfile | null;
   oba?: { status: string } | null;
-  users?: PhoneNumberUser[];
-}
-
-export interface PhoneNumberUser {
-  id: number;
-  name: string;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 /** Laravel validation error envelope (HTTP 422). */
@@ -110,6 +112,27 @@ export interface ObaApplicationPayload {
   additional_supporting_information?: string | null;
 }
 
+/** `PATCH /phone-numbers/{phoneNumber}/identity-key-check`. */
+export interface UpdateIdentityKeyCheckPayload {
+  enabled: boolean;
+}
+
+export type StorageStatus =
+  | 'DEFAULT'
+  | 'IN_COUNTRY_STORAGE_ENABLED'
+  | 'NO_STORAGE_ENABLED';
+
+/**
+ * `PATCH /phone-numbers/{phoneNumber}/storage`.
+ * `data_localization_region` required when IN_COUNTRY; `default_media_ttl` only
+ * when NO_STORAGE. Requires the number to be deregistered first.
+ */
+export interface UpdateStoragePayload {
+  status: StorageStatus;
+  data_localization_region?: string;
+  default_media_ttl?: number;
+}
+
 /**
  * `GET /onboarding/config` — bootstrap data for the Meta signup widget.
  * Plain object (no `data` wrapper).
@@ -117,7 +140,7 @@ export interface ObaApplicationPayload {
 export interface OnboardingConfig {
   app_id: string;
   configuration_id: string;
-  /** Optional: pre-fills the signup popup with the company's business portfolio. */
+  /** Optional: pre-fills the signup popup with the caller's business portfolio. */
   business_portfolio_id?: string | null;
 }
 
@@ -126,25 +149,23 @@ export interface CompleteOnboardingPayload {
   code: string;
   waba_id: string;
   phone_number_id: string;
-  business_id?: string;
+  business_id: string;
   coexistence?: boolean;
 }
 
-/** `POST /phone-numbers` — add a subsequent number to an onboarded WABA. */
+/** `POST /phone-numbers` — add a number, or register a new WABA under the portfolio. */
 export interface AddPhoneNumberPayload {
   code: string;
   waba_id: string;
   phone_number_id: string;
-  signup_type?: string;
-  signup_event?: string;
+  coexistence?: boolean;
 }
 
 /** Session data emitted by the Meta Embedded Signup popup via `postMessage`. */
 export interface EmbeddedSignupSession {
   waba_id: string;
   phone_number_id: string;
-  signup_type: string;
-  signup_event: string;
+  business_id?: string;
 }
 
 /** Laravel paginated collection envelope. */

@@ -3,7 +3,7 @@ import { CloudSync, LoaderCircle } from 'lucide-react';
 
 import { type WhatsAppAccountClientConfig } from '../client';
 import { useBusinessAccounts } from '../hooks';
-import { type WhatsAppBusinessAccount } from '../types';
+import { type WhatsAppAccount } from '../types';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import {
@@ -23,9 +23,9 @@ import {
 
 export interface BusinessAccountListProps extends WhatsAppAccountClientConfig {
   page?: number;
-  onSelect?: (businessAccount: WhatsAppBusinessAccount) => void;
+  onSelect?: (businessAccount: WhatsAppAccount) => void;
   /** Omit to hide the sync column. `syncingId` marks the row currently syncing. */
-  onSync?: (businessAccount: WhatsAppBusinessAccount) => void;
+  onSync?: (businessAccount: WhatsAppAccount) => void;
   syncingId?: number | null;
   emptyState?: ReactNode;
 }

@@ -100,6 +100,30 @@ describe('usePhoneNumberActions', () => {
     expect(body).toMatchObject({ about: 'hi' });
   });
 
+  it('toggles identity key check and configures storage via PATCH', async () => {
+    const patch = vi.fn().mockResolvedValue({ data: updated });
+    const instance = mockAxios({ patch });
+    const { result } = renderHook(() =>
+      usePhoneNumberActions({ phoneNumberId: '106', axios: instance }),
+    );
+
+    await act(async () => {
+      await result.current.updateIdentityKeyCheck({ enabled: true });
+      await result.current.updateStorage({ status: 'DEFAULT' });
+    });
+
+    expect(patch).toHaveBeenCalledWith(
+      'api/whatsapp/phone-numbers/106/identity-key-check',
+      { enabled: true },
+      undefined,
+    );
+    expect(patch).toHaveBeenCalledWith(
+      'api/whatsapp/phone-numbers/106/storage',
+      { status: 'DEFAULT' },
+      undefined,
+    );
+  });
+
   it('populates errors on a 422 and rejects', async () => {
     const error = {
       response: {

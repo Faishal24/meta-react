@@ -11,11 +11,13 @@ function mockAxios(get: ReturnType<typeof vi.fn>): AxiosInstance {
 const number = {
   data: {
     id: 34,
+    whatsapp_account_id: 12,
     phone_number_id: '106',
     display_phone_number: '+62 812',
     verified_name: 'Acme Sales',
     name_status: 'APPROVED',
     status: 'connected',
+    has_pin: true,
     business_profile: {
       about: 'We ship maps.',
       address: null,

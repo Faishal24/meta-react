@@ -28,7 +28,7 @@ describe('useBusinessAccounts', () => {
     expect(result.current.pagination).toEqual(page.meta);
     expect(result.current.error).toBeNull();
     expect(get).toHaveBeenCalledWith(
-      'api/whatsapp/business-accounts',
+      'api/whatsapp/whatsapp-accounts',
       expect.objectContaining({ params: { page: 1 } }),
     );
   });
@@ -45,7 +45,7 @@ describe('useBusinessAccounts', () => {
 
     await waitFor(() =>
       expect(get).toHaveBeenCalledWith(
-        'api/v2/wa/business-accounts',
+        'api/v2/wa/whatsapp-accounts',
         expect.objectContaining({ params: { page: 3 } }),
       ),
     );

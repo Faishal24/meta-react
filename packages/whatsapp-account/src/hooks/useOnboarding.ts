@@ -11,12 +11,12 @@ import {
   type EmbeddedSignupSession,
   type OnboardingConfig,
   type ValidationErrors,
-  type WhatsAppBusinessAccount,
+  type WhatsAppAccount,
   type WhatsAppPhoneNumber,
 } from '../types';
 
 export interface UseOnboardingOptions extends WhatsAppAccountClientConfig {
-  onOnboarded?: (businessAccount: WhatsAppBusinessAccount) => void;
+  onOnboarded?: (businessAccount: WhatsAppAccount) => void;
   onPhoneNumberAdded?: (phoneNumber: WhatsAppPhoneNumber) => void;
 }
 
@@ -94,8 +94,7 @@ export function useOnboarding(
           sessionRef.current = {
             waba_id: parsed.data.waba_id,
             phone_number_id: parsed.data.phone_number_id,
-            signup_type: parsed.type,
-            signup_event: parsed.event,
+            business_id: parsed.data.business_id,
           };
         }
       } catch {
@@ -138,11 +137,12 @@ export function useOnboarding(
       try {
         if (endpoint === 'onboarding') {
           const response = await instance.post<{
-            data: WhatsAppBusinessAccount;
+            data: WhatsAppAccount;
           }>(url('onboarding'), {
             code,
             waba_id: session.waba_id,
             phone_number_id: session.phone_number_id,
+            business_id: session.business_id,
           });
           onOnboarded?.(response.data.data);
         } else {
@@ -152,8 +152,6 @@ export function useOnboarding(
               code,
               waba_id: session.waba_id,
               phone_number_id: session.phone_number_id,
-              signup_type: session.signup_type,
-              signup_event: session.signup_event,
             },
           );
           onPhoneNumberAdded?.(response.data.data);

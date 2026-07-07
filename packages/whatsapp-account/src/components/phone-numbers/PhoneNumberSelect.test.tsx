@@ -24,7 +24,7 @@ describe('PhoneNumberSelect', () => {
     await waitFor(() => expect(get).toHaveBeenCalled());
   });
 
-  it('honors a custom placeholder', () => {
+  it('honors a custom placeholder', async () => {
     const get = vi.fn().mockResolvedValue({ data: numbers });
     render(
       <PhoneNumberSelect
@@ -35,5 +35,6 @@ describe('PhoneNumberSelect', () => {
     );
 
     expect(screen.getByText('Pick one')).toBeTruthy();
+    await waitFor(() => expect(get).toHaveBeenCalled());
   });
 });

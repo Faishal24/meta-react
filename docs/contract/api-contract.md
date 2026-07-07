@@ -1,4 +1,4 @@
-# API contract — `whatsapp-account`
+# API contract — `meta-account`
 
 The JSON contract between this backend-only package and the **frontend package**
 (separate). This is the single source of truth for endpoint shapes.
@@ -9,13 +9,14 @@ The JSON contract between this backend-only package and the **frontend package**
 
 ## Conventions
 
-- **Base:** all routes under `config('whatsapp.route.prefix')` (default `api/whatsapp`).
+- **Base:** all routes under `config('meta.route.prefix')` (default `api/whatsapp`).
 - **Auth:** Sanctum (`auth:sanctum`). Default **stateful** (SPA cookie); the frontend may
   instead send `Authorization: Bearer <token>` when the consumer runs stateless. The
   frontend decides what it sends — the backend accepts either.
-- **Tenancy:** every route is scoped to the caller's company
-  (`config('whatsapp-account.tenant_resolver')`, default `Auth::user()->company_id`). A
-  number/WABA outside the caller's company returns `404` (not `403` — don't leak existence).
+- **Tenancy:** every route is scoped to the caller's `business_portfolio_id`
+  (`config('meta-account.tenant_resolver')`, default **null** — the consumer binds it,
+  e.g. `Auth::user()->business_portfolio_id`). A number/WABA outside the caller's portfolio
+  returns `404` (not `403` — don't leak existence).
 - **Binding:** `{phoneNumber}` binds by `phone_number_id`; `{waba}` by `waba_id`.
 - **Success:** reads return `{ "data": … }` (JsonResource). Mutations return the updated
   resource (`200`) or `202` when the real work is queued, with `{ "data": … }`.
@@ -31,7 +32,7 @@ The JSON contract between this backend-only package and the **frontend package**
 
 ## Resource shapes (referenced throughout)
 
-**`WhatsAppBusinessAccountResource`** — never includes `business_token`; `token_status`
+**`WhatsAppAccountResource`** — never includes `business_token`; `token_status`
 is derived (`no_token|expired|expiring_soon|valid`):
 
 ```json
@@ -48,16 +49,22 @@ is derived (`no_token|expired|expiring_soon|valid`):
   "country": "ID",
   "business_verification_status": "verified",
   "account_review_status": "approved",
-  "health_status": { "can_send_message": "available" }
+  "health_status": { "can_send_message": "available" },
+  "created_at": "2026-07-03T09:00:00+00:00",
+  "updated_at": "2026-07-03T09:10:04+00:00"
 }
 ```
 
-**`WhatsAppPhoneNumberResource`** — never includes `pin`; `business_profile` is projected
-from `metadata`, `users` only `whenLoaded`:
+**`WhatsAppPhoneNumberResource`** — never includes `pin`; exposes `has_pin` (boolean) so the
+FE knows whether a two-step PIN is set without ever seeing its value; `business_profile` is
+its own column (not projected from a shared bucket). **No commerce fields** (`is_cart_enabled`, `is_catalog_visible`,
+`commerce_settings_synced_at` in the reference CRM) — this package stores no commerce
+columns on phone numbers by design (AGENTS.md #7); a sibling package (catalog) adds those:
 
 ```json
 {
   "id": 34,
+  "whatsapp_account_id": 12,
   "phone_number_id": "106540352242922",
   "display_phone_number": "+62 812-3456-7890",
   "verified_name": "OfficeMap Sales",
@@ -67,6 +74,7 @@ from `metadata`, `users` only `whenLoaded`:
   "throughput_level": "STANDARD",
   "code_verification_status": "VERIFIED",
   "status": "connected",
+  "has_pin": true,
   "registered_at": "2026-07-03T09:12:41+00:00",
   "business_profile": {
     "about": "We ship maps.",
@@ -79,13 +87,13 @@ from `metadata`, `users` only `whenLoaded`:
     "synced_at": "2026-07-03T09:12:45+00:00"
   },
   "oba": { "status": "NOT_STARTED" },
-  "users": [
-    { "id": 7, "name": "Ari" }
-  ]
+  "created_at": "2026-07-03T09:11:00+00:00",
+  "updated_at": "2026-07-03T09:12:45+00:00"
 }
 ```
 
-**`CompanyResource`** — `{ "id": 3, "name": "OfficeMap", "business_portfolio_id": "178090…" }`.
+**`BusinessPortfolioResource`** (the tenant) —
+`{ "id": 3, "business_portfolio_id": "178090…", "name": "Office Map", "verification_status": "verified" }`.
 
 ---
 
@@ -95,19 +103,22 @@ Legend: 🌱 planned · 🚧 in progress · ✅ shipped (shape documented).
 
 | Method | Path | Purpose | Status |
 |---|---|---|---|
-| `GET` | `/onboarding/config` | app id + configuration id for the FE signup widget | 🌱 |
-| `POST` | `/onboarding` | exchange `code` → token, create WABA + first phone | 🌱 |
-| `POST` | `/phone-numbers` | add a subsequent number via signup `code` | 🌱 |
-| `GET` | `/business-accounts` | list the company's WABAs | 🌱 |
-| `GET` | `/business-accounts/{waba}` | one WABA (no token) | 🌱 |
-| `POST` | `/business-accounts/{waba}/sync` | refresh from Meta | 🌱 |
-| `GET` | `/phone-numbers` | list the company's numbers | 🌱 |
+| `GET` | `/onboarding/config` | app id + configuration id for the FE signup widget | ✅ |
+| `POST` | `/onboarding` | exchange `code` → token, create WABA + first phone | ✅ |
+| `POST` | `/phone-numbers` | add a subsequent number via signup `code` | ✅ |
+| `GET` | `/whatsapp-accounts` | list the tenant's WABAs | 🌱 |
+| `GET` | `/whatsapp-accounts/{waba}` | one WABA (no token) | 🌱 |
+| `POST` | `/whatsapp-accounts/{waba}/sync` | refresh from Meta | 🌱 |
+| `POST` | `/whatsapp-accounts/{waba}/refresh-token` | manually refresh the business token | 🌱 |
+| `GET` | `/phone-numbers` | list the tenant's numbers | 🌱 |
 | `GET` | `/phone-numbers/{phoneNumber}` | one number (overview/profile/management) | 🌱 |
 | `POST` | `/phone-numbers/{phoneNumber}/register` · `/deregister` · `/sync` | lifecycle | 🌱 |
 | `PATCH` | `/phone-numbers/{phoneNumber}/two-step-pin` | set 2FA PIN | 🌱 |
 | `PATCH` | `/phone-numbers/{phoneNumber}/business-profile` | edit profile | 🌱 |
 | `PATCH` | `/phone-numbers/{phoneNumber}/display-name` | change display name | 🌱 |
 | `POST` | `/phone-numbers/{phoneNumber}/oba` | request Official Business Account | 🌱 |
+| `PATCH` | `/phone-numbers/{phoneNumber}/identity-key-check` | toggle identity key check | 🌱 |
+| `PATCH` | `/phone-numbers/{phoneNumber}/storage` | data storage configuration | 🌱 |
 
 ---
 
@@ -163,7 +174,7 @@ Content-Type: application/json
 | `code` | required, string |
 | `waba_id` | required, string |
 | `phone_number_id` | required, string |
-| `business_id` | optional, string |
+| `business_id` | required, string |
 | `coexistence` | optional, boolean (default `false`) |
 
 **Response** `202 Accepted` — the created WABA with its first phone nested:
@@ -192,7 +203,7 @@ Content-Type: application/json
 }
 ```
 
-**Errors** — `409` if the WABA already onboarded for this company; `422` on missing/invalid
+**Errors** — `409` if the WABA already onboarded for this portfolio; `422` on missing/invalid
 `code`; `502` (mapped from the SDK `GraphApiException`) if the token exchange fails.
 
 ---
@@ -200,7 +211,17 @@ Content-Type: application/json
 #### `POST /phone-numbers`
 
 Add a subsequent number to an already-onboarded WABA (a second signup flow yields a new
-`code`).
+`code`) — **or** register a brand-new WABA under the caller's own portfolio, when
+`waba_id` isn't known yet. A new WABA is only accepted after verifying, via Meta's
+`owner_business_info`, that it actually belongs to the caller's resolved portfolio
+(matches the reference CRM's check) — this only runs when the caller resolves to a
+single portfolio (`config('meta-account.tenant_resolver')`); an unscoped or multi-portfolio
+caller can still add a number to an *existing* WABA, just not register a new one with an
+assigned portfolio.
+
+If the token exchange fails but the WABA already exists with a still-usable stored token
+(not expired), the request still succeeds using that stored token — a brand-new WABA has
+no such fallback.
 
 **Request** — `AddPhoneNumberRequest`
 
@@ -209,37 +230,37 @@ Add a subsequent number to an already-onboarded WABA (a second signup flow yield
   "code": "AQD…exchange-code-2",
   "waba_id": "102290129340398",
   "phone_number_id": "106540352299999",
-  "signup_type": "WA_EMBEDDED_SIGNUP",
-  "signup_event": "FINISH"
+  "coexistence": false
 }
 ```
 
 | Field | Rules |
 |---|---|
 | `code` | required, string |
-| `waba_id` | required, string, must belong to the caller's company |
+| `waba_id` | required, string |
 | `phone_number_id` | required, string, `unique` on phone numbers |
-| `signup_type` | optional, string |
-| `signup_event` | optional, string |
+| `coexistence` | optional, boolean (default `false`) — same flag as `POST /onboarding`; drives `signup_event` |
 
 **Response** `202 Accepted` — `{ "data": WhatsAppPhoneNumberResource }` with `status:
 "pending"`.
 
-**Errors** — `404` if `waba_id` is outside the caller's company; `422` if
-`phone_number_id` already exists.
+**Errors** — `404` if an *existing* `waba_id` is outside the caller's portfolio (existence
+not leaked); `422` if a *new* `waba_id` turns out to belong to a different business
+portfolio, or if `phone_number_id` already exists; `502` on a Meta/Graph failure with no
+usable fallback token.
 
 ---
 
 ### Business accounts (WABA)
 
-#### `GET /business-accounts`
+#### `GET /whatsapp-accounts`
 
-Paginated list of the company's WABAs.
+Paginated list of the tenant's WABAs.
 
 **Request**
 
 ```http
-GET /api/whatsapp/business-accounts?page=1
+GET /api/whatsapp/whatsapp-accounts?page=1
 ```
 
 **Response** `200 OK`
@@ -250,8 +271,8 @@ GET /api/whatsapp/business-accounts?page=1
     { "id": 12, "waba_id": "102290129340398", "name": "OfficeMap Sales", "token_status": "valid", "phone_numbers_count": 2, "account_review_status": "approved" }
   ],
   "links": {
-    "first": "https://host/api/whatsapp/business-accounts?page=1",
-    "last": "https://host/api/whatsapp/business-accounts?page=1",
+    "first": "https://host/api/whatsapp/whatsapp-accounts?page=1",
+    "last": "https://host/api/whatsapp/whatsapp-accounts?page=1",
     "prev": null,
     "next": null
   },
@@ -261,31 +282,31 @@ GET /api/whatsapp/business-accounts?page=1
 
 ---
 
-#### `GET /business-accounts/{waba}`
+#### `GET /whatsapp-accounts/{waba}`
 
 One WABA, bound by `waba_id`. Never exposes `business_token`.
 
 **Request**
 
 ```http
-GET /api/whatsapp/business-accounts/102290129340398
+GET /api/whatsapp/whatsapp-accounts/102290129340398
 ```
 
-**Response** `200 OK` — `{ "data": WhatsAppBusinessAccountResource }` (see resource shape
+**Response** `200 OK` — `{ "data": WhatsAppAccountResource }` (see resource shape
 above).
 
-**Errors** — `404` if the WABA is missing or outside the caller's company.
+**Errors** — `404` if the WABA is missing or outside the caller's portfolio.
 
 ---
 
-#### `POST /business-accounts/{waba}/sync`
+#### `POST /whatsapp-accounts/{waba}/sync`
 
 Queue a refresh of the WABA from Meta (name, review status, health).
 
 **Request**
 
 ```http
-POST /api/whatsapp/business-accounts/102290129340398/sync
+POST /api/whatsapp/whatsapp-accounts/102290129340398/sync
 ```
 
 **Response** `202 Accepted` — the current (pre-refresh) resource; the refresh runs async:
@@ -296,11 +317,33 @@ POST /api/whatsapp/business-accounts/102290129340398/sync
 
 ---
 
+#### `POST /whatsapp-accounts/{waba}/refresh-token`
+
+Manually refresh the WABA's business token (`fb_exchange_token`, ~60-day extension) —
+the on-demand counterpart to the daily `meta-account:refresh-business-tokens` schedule.
+Uses the existing `OnboardingService::refreshToken()`.
+
+**Request**
+
+```http
+POST /api/whatsapp/whatsapp-accounts/102290129340398/refresh-token
+```
+
+**Response** `200 OK` — the WABA with its new `token_expires_at`:
+
+```json
+{ "data": { "id": 12, "waba_id": "102290129340398", "token_status": "valid", "token_expires_at": "2026-09-05T00:00:00+00:00" } }
+```
+
+**Errors** — `409` if the WABA has no token to refresh (`no_token` status); `502` on a Meta/Graph failure.
+
+---
+
 ### Phone numbers
 
 #### `GET /phone-numbers`
 
-Paginated list of the company's numbers (same envelope as `GET /business-accounts`).
+Paginated list of the tenant's numbers (same envelope as `GET /whatsapp-accounts`).
 
 **Response** `200 OK`
 
@@ -317,7 +360,7 @@ Paginated list of the company's numbers (same envelope as `GET /business-account
 
 #### `GET /phone-numbers/{phoneNumber}`
 
-One number, bound by `phone_number_id`. Overview + `metadata.business_profile` + `oba` +
+One number, bound by `phone_number_id`. Overview + `business_profile` + `oba` +
 `users` are **fields of this resource**, not separate endpoints.
 
 **Request**
@@ -374,6 +417,55 @@ back.
 
 ```json
 { "message": "The pin field must be 6 digits.", "errors": { "pin": ["The pin field must be 6 digits."] } }
+```
+
+---
+
+#### `PATCH /phone-numbers/{phoneNumber}/identity-key-check`
+
+Toggle end-to-end identity key verification. Write-only on Meta's side (`GET /settings`
+never returns it), so the value is mirrored in the `settings` column for reads.
+
+**Request** — `UpdateIdentityKeyCheckRequest`
+
+```json
+{ "enabled": true }
+```
+
+| Field | Rules |
+|---|---|
+| `enabled` | required, boolean |
+
+**Response** `200 OK` — `{ "data": WhatsAppPhoneNumberResource }` with
+`settings.identity_key_check` updated.
+
+---
+
+#### `PATCH /phone-numbers/{phoneNumber}/storage`
+
+Configure data storage: default, in-country (with region), or no-storage (with media
+TTL). **Requires the number to be deregistered first** — Meta rejects the change
+otherwise.
+
+**Request** — `UpdateStorageConfigurationRequest`
+
+```json
+{ "status": "IN_COUNTRY_STORAGE_ENABLED", "data_localization_region": "ID" }
+```
+
+| Field | Rules |
+|---|---|
+| `status` | required, in `DEFAULT` / `IN_COUNTRY_STORAGE_ENABLED` / `NO_STORAGE_ENABLED` |
+| `data_localization_region` | required_if `status=IN_COUNTRY_STORAGE_ENABLED`, else prohibited |
+| `default_media_ttl` | prohibited unless `status=NO_STORAGE_ENABLED`, integer `60–43200` |
+
+**Response** `200 OK` — `{ "data": WhatsAppPhoneNumberResource }` with `settings.storage.*`
+updated.
+
+**Errors** — `409` if the number is currently registered (must deregister first).
+
+```json
+{ "message": "Deregister this phone number before changing its storage configuration." }
 ```
 
 ---

@@ -31,5 +31,11 @@ export type {
   UsePhoneNumberActionsOptions,
 } from './usePhoneNumberActions';
 
+export { useWhatsAppAccountActions } from './useWhatsAppAccountActions';
+export type {
+  UseWhatsAppAccountActions,
+  UseWhatsAppAccountActionsOptions,
+} from './useWhatsAppAccountActions';
+
 export { useBusinessProfileForm } from './useBusinessProfileForm';
 export type { UseBusinessProfileFormOptions } from './useBusinessProfileForm';

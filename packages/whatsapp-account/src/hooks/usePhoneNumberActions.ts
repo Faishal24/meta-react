@@ -6,6 +6,8 @@ import {
   type ObaApplicationPayload,
   type UpdateBusinessProfilePayload,
   type UpdateDisplayNamePayload,
+  type UpdateIdentityKeyCheckPayload,
+  type UpdateStoragePayload,
   type UpdateTwoStepPinPayload,
   type ValidationErrors,
   type WhatsAppPhoneNumber,
@@ -30,6 +32,10 @@ export interface UsePhoneNumberActions {
     payload: UpdateDisplayNamePayload,
   ) => Promise<WhatsAppPhoneNumber>;
   applyForOba: (payload: ObaApplicationPayload) => Promise<WhatsAppPhoneNumber>;
+  updateIdentityKeyCheck: (
+    payload: UpdateIdentityKeyCheckPayload,
+  ) => Promise<WhatsAppPhoneNumber>;
+  updateStorage: (payload: UpdateStoragePayload) => Promise<WhatsAppPhoneNumber>;
   isProcessing: boolean;
   /** Field errors from the last 422; cleared when the next action starts. */
   errors: ValidationErrors | null;
@@ -148,6 +154,9 @@ export function usePhoneNumberActions(
     },
     updateDisplayName: (payload) => run('patch', 'display-name', payload),
     applyForOba: (payload) => run('post', 'oba', payload),
+    updateIdentityKeyCheck: (payload) =>
+      run('patch', 'identity-key-check', payload),
+    updateStorage: (payload) => run('patch', 'storage', payload),
     isProcessing,
     errors,
     error,

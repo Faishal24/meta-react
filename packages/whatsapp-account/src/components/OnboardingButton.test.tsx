@@ -32,7 +32,7 @@ describe('OnboardingButton', () => {
 
     render(<OnboardingButton mode="add-number" axios={mockAxios(get)} />);
 
-    expect(screen.getByText('Add number')).toBeTruthy();
+    expect(await screen.findByText('Add number')).toBeTruthy();
   });
 
   it('renders custom children over the default label', async () => {
@@ -41,6 +41,6 @@ describe('OnboardingButton', () => {
 
     render(<OnboardingButton axios={mockAxios(get)}>Sign up</OnboardingButton>);
 
-    expect(screen.getByText('Sign up')).toBeTruthy();
+    expect(await screen.findByText('Sign up')).toBeTruthy();
   });
 });

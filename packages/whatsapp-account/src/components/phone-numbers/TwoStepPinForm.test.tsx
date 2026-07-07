@@ -23,14 +23,14 @@ describe('TwoStepPinForm', () => {
     expect(button).toHaveProperty('disabled', false);
   });
 
-  it('labels the action Set vs Update from pinSet', () => {
+  it('labels the action Set vs Update from hasPin', () => {
     const { rerender } = render(
       <TwoStepPinForm phoneNumberId="106" axios={mockAxios(vi.fn())} />,
     );
     expect(screen.getByRole('button').textContent).toBe('Set PIN');
 
     rerender(
-      <TwoStepPinForm phoneNumberId="106" pinSet axios={mockAxios(vi.fn())} />,
+      <TwoStepPinForm phoneNumberId="106" hasPin axios={mockAxios(vi.fn())} />,
     );
     expect(screen.getByRole('button').textContent).toBe('Update');
   });

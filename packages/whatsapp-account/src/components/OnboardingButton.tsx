@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react';
 import { type WhatsAppAccountClientConfig } from '../client';
 import { useOnboarding } from '../hooks';
 import {
-  type WhatsAppBusinessAccount,
+  type WhatsAppAccount,
   type WhatsAppPhoneNumber,
 } from '../types';
 import { Button } from './ui/button';
@@ -15,7 +15,7 @@ export interface OnboardingButtonProps extends WhatsAppAccountClientConfig {
    * `add-number` adds a subsequent number to an existing WABA.
    */
   mode?: 'onboarding' | 'add-number';
-  onOnboarded?: (businessAccount: WhatsAppBusinessAccount) => void;
+  onOnboarded?: (businessAccount: WhatsAppAccount) => void;
   onPhoneNumberAdded?: (phoneNumber: WhatsAppPhoneNumber) => void;
   children?: ReactNode;
 }
