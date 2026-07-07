@@ -52,6 +52,20 @@ export function healthStatusDisplay(health: Record<string, unknown> | null): Sta
   };
 }
 
+const OBA_STATUS: Record<string, StatusDisplay> = {
+  NOT_STARTED: { label: 'Not started', variant: 'outline' },
+  PENDING: { label: 'Pending', variant: 'secondary' },
+  UNDER_REVIEW: { label: 'Under review', variant: 'secondary' },
+  APPROVED: { label: 'Approved', variant: 'default' },
+  REJECTED: { label: 'Rejected', variant: 'destructive' },
+  EXPIRED: { label: 'Expired', variant: 'destructive' },
+  CANCELLED: { label: 'Cancelled', variant: 'destructive' },
+};
+
+export function obaStatusDisplay(status: string): StatusDisplay {
+  return OBA_STATUS[status] ?? { label: status, variant: 'outline' };
+}
+
 // Collapse the OBA lifecycle + business-verification gate into one onboarding
 // stage badge (verify business → ready → under review → official).
 export function accountStageDisplay(

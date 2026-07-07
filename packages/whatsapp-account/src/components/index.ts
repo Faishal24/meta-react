@@ -31,5 +31,14 @@ export type { DisplayNameFormProps } from './business-profile/DisplayNameForm';
 export { SummaryCard } from './business-profile/SummaryCard';
 export type { SummaryCardProps } from './business-profile/SummaryCard';
 
+export { ObaForm } from './business-profile/ObaForm';
+export type { ObaFormProps } from './business-profile/ObaForm';
+
+export { TwoStepPinForm } from './TwoStepPinForm';
+export type { TwoStepPinFormProps } from './TwoStepPinForm';
+
+export { OnboardingButton } from './OnboardingButton';
+export type { OnboardingButtonProps } from './OnboardingButton';
+
 export { PhoneNumberDetail } from './PhoneNumberDetail';
 export type { PhoneNumberDetailProps } from './PhoneNumberDetail';
