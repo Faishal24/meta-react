@@ -37,8 +37,17 @@ export type { ObaFormProps } from './business-profile/ObaForm';
 export { TwoStepPinForm } from './phone-numbers/TwoStepPinForm';
 export type { TwoStepPinFormProps } from './phone-numbers/TwoStepPinForm';
 
+export { IdentityKeyCheckForm } from './phone-numbers/IdentityKeyCheckForm';
+export type { IdentityKeyCheckFormProps } from './phone-numbers/IdentityKeyCheckForm';
+
+export { StorageForm } from './phone-numbers/StorageForm';
+export type { StorageFormProps, RegionOption } from './phone-numbers/StorageForm';
+
 export { OnboardingButton } from './OnboardingButton';
 export type { OnboardingButtonProps } from './OnboardingButton';
+
+export { RefreshTokenButton } from './RefreshTokenButton';
+export type { RefreshTokenButtonProps } from './RefreshTokenButton';
 
 export { PhoneNumberDetail } from './phone-numbers/PhoneNumberDetail';
 export type { PhoneNumberDetailProps } from './phone-numbers/PhoneNumberDetail';
