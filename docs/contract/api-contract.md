@@ -56,10 +56,20 @@ is derived (`no_token|expired|expiring_soon|valid`):
 ```
 
 **`WhatsAppPhoneNumberResource`** — never includes `pin`; exposes `has_pin` (boolean) so the
-FE knows whether a two-step PIN is set without ever seeing its value; `business_profile` is
-its own column (not projected from a shared bucket). **No commerce fields** (`is_cart_enabled`, `is_catalog_visible`,
-`commerce_settings_synced_at` in the reference CRM) — this package stores no commerce
-columns on phone numbers by design (AGENTS.md #7); a sibling package (catalog) adds those:
+FE knows whether a two-step PIN is set without ever seeing its value. `registered` is
+derived from `status` (`PhoneNumberStatus::isRegistered()` — true for
+connected/flagged/rate_limited/restricted) so the FE doesn't have to duplicate that mapping.
+`business_profile`, `display_name`, `settings` are each their own column (not projected
+from a shared bucket). `display_name` always carries all four sub-keys, `null`/`[]` when
+unset rather than absent: `pending_name` (the submitted name awaiting review),
+`rejection_reason` / `rejected_at` (written by the `phone_number_name_update` webhook
+handler on a REJECTED decision — not implemented yet, so always `null` until it lands),
+and `recent_change_timestamps` (ISO 8601 timestamps pruned to the rolling 30-day window,
+backing the 10-changes/30-days cap). `settings` carries `identity_key_check` and `storage`.
+**No commerce fields** (`is_cart_enabled`,
+`is_catalog_visible`, `commerce_settings_synced_at` in the reference CRM) — this package
+stores no commerce columns on phone numbers by design (AGENTS.md #7); a sibling package
+(catalog) adds those:
 
 ```json
 {
@@ -74,6 +84,7 @@ columns on phone numbers by design (AGENTS.md #7); a sibling package (catalog) a
   "throughput_level": "STANDARD",
   "code_verification_status": "VERIFIED",
   "status": "connected",
+  "registered": true,
   "has_pin": true,
   "registered_at": "2026-07-03T09:12:41+00:00",
   "business_profile": {
@@ -85,6 +96,16 @@ columns on phone numbers by design (AGENTS.md #7); a sibling package (catalog) a
     "vertical": "PROF_SERVICES",
     "profile_picture_url": "https://…/photo.jpg",
     "synced_at": "2026-07-03T09:12:45+00:00"
+  },
+  "display_name": {
+    "pending_name": "OfficeMap Support",
+    "rejection_reason": null,
+    "rejected_at": null,
+    "recent_change_timestamps": ["2026-07-03T09:10:00+00:00"]
+  },
+  "settings": {
+    "identity_key_check": true,
+    "storage": { "status": "DEFAULT" }
   },
   "oba": { "status": "NOT_STARTED" },
   "created_at": "2026-07-03T09:11:00+00:00",
@@ -106,19 +127,20 @@ Legend: 🌱 planned · 🚧 in progress · ✅ shipped (shape documented).
 | `GET` | `/onboarding/config` | app id + configuration id for the FE signup widget | ✅ |
 | `POST` | `/onboarding` | exchange `code` → token, create WABA + first phone | ✅ |
 | `POST` | `/phone-numbers` | add a subsequent number via signup `code` | ✅ |
-| `GET` | `/whatsapp-accounts` | list the tenant's WABAs | 🌱 |
-| `GET` | `/whatsapp-accounts/{waba}` | one WABA (no token) | 🌱 |
-| `POST` | `/whatsapp-accounts/{waba}/sync` | refresh from Meta | 🌱 |
-| `POST` | `/whatsapp-accounts/{waba}/refresh-token` | manually refresh the business token | 🌱 |
-| `GET` | `/phone-numbers` | list the tenant's numbers | 🌱 |
-| `GET` | `/phone-numbers/{phoneNumber}` | one number (overview/profile/management) | 🌱 |
-| `POST` | `/phone-numbers/{phoneNumber}/register` · `/deregister` · `/sync` | lifecycle | 🌱 |
-| `PATCH` | `/phone-numbers/{phoneNumber}/two-step-pin` | set 2FA PIN | 🌱 |
-| `PATCH` | `/phone-numbers/{phoneNumber}/business-profile` | edit profile | 🌱 |
-| `PATCH` | `/phone-numbers/{phoneNumber}/display-name` | change display name | 🌱 |
-| `POST` | `/phone-numbers/{phoneNumber}/oba` | request Official Business Account | 🌱 |
-| `PATCH` | `/phone-numbers/{phoneNumber}/identity-key-check` | toggle identity key check | 🌱 |
-| `PATCH` | `/phone-numbers/{phoneNumber}/storage` | data storage configuration | 🌱 |
+| `GET` | `/whatsapp-accounts` | list the tenant's WABAs | ✅ |
+| `GET` | `/whatsapp-accounts/{waba}` | one WABA (no token) | ✅ |
+| `POST` | `/whatsapp-accounts/{waba}/sync` | refresh from Meta | ✅ |
+| `POST` | `/whatsapp-accounts/{waba}/refresh-token` | manually refresh the business token | ✅ |
+| `GET` | `/phone-numbers` | list the tenant's numbers | ✅ |
+| `GET` | `/phone-numbers/{phoneNumber}` | one number (overview/profile/management) | ✅ |
+| `POST` | `/phone-numbers/{phoneNumber}/sync` | refresh from Meta | ✅ |
+| `POST` | `/phone-numbers/{phoneNumber}/register` · `/deregister` | lifecycle | ✅ |
+| `PATCH` | `/phone-numbers/{phoneNumber}/two-step-pin` | set 2FA PIN | ✅ |
+| `PATCH` | `/phone-numbers/{phoneNumber}/business-profile` | edit profile (incl. photo via Resumable Upload) | ✅ |
+| `PATCH` | `/phone-numbers/{phoneNumber}/display-name` | change display name | ✅ |
+| `POST` | `/phone-numbers/{phoneNumber}/oba` | request Official Business Account | ✅ |
+| `PATCH` | `/phone-numbers/{phoneNumber}/identity-key-check` | toggle identity key check | ✅ |
+| `PATCH` | `/phone-numbers/{phoneNumber}/storage` | data storage configuration | ✅ |
 
 ---
 
@@ -301,7 +323,8 @@ above).
 
 #### `POST /whatsapp-accounts/{waba}/sync`
 
-Queue a refresh of the WABA from Meta (name, review status, health).
+Refresh the WABA from Meta (name, review status, health) — **synchronous**: the request
+blocks until the refresh completes, so the FE shows a loading state rather than polling.
 
 **Request**
 
@@ -309,11 +332,13 @@ Queue a refresh of the WABA from Meta (name, review status, health).
 POST /api/whatsapp/whatsapp-accounts/102290129340398/sync
 ```
 
-**Response** `202 Accepted` — the current (pre-refresh) resource; the refresh runs async:
+**Response** `200 OK` — the refreshed resource:
 
 ```json
 { "data": { "id": 12, "waba_id": "102290129340398", "name": "OfficeMap Sales", "token_status": "valid" } }
 ```
+
+**Errors** — `502` on a Meta/Graph failure.
 
 ---
 
@@ -360,8 +385,7 @@ Paginated list of the tenant's numbers (same envelope as `GET /whatsapp-accounts
 
 #### `GET /phone-numbers/{phoneNumber}`
 
-One number, bound by `phone_number_id`. Overview + `business_profile` + `oba` +
-`users` are **fields of this resource**, not separate endpoints.
+One number management, business profile, calling (on whatsapp-calling package) not separate endpoints.
 
 **Request**
 
@@ -377,7 +401,8 @@ GET /api/whatsapp/phone-numbers/106540352242922
 
 #### `POST /phone-numbers/{phoneNumber}/register` · `/deregister` · `/sync`
 
-Lifecycle actions against Meta, all queued.
+Lifecycle actions against Meta — **synchronous**: each blocks until Meta responds, so the
+FE shows a loading state rather than polling for a queued result.
 
 **Request**
 
@@ -385,9 +410,10 @@ Lifecycle actions against Meta, all queued.
 POST /api/whatsapp/phone-numbers/106540352242922/register
 ```
 
-**Response** `202 Accepted` — `{ "data": WhatsAppPhoneNumberResource }`.
+**Response** `200 OK` — `{ "data": WhatsAppPhoneNumberResource }` with the updated state.
 
 **Errors** — `409` if already in the target state (e.g. registering a `connected` number);
+`422` if `register` is called with no two-step PIN set; `502` on a Meta/Graph failure;
 `404` out-of-tenant.
 
 ```json
@@ -521,6 +547,15 @@ Request a display-name change (Meta re-reviews, so `name_status` returns to
 **Response** `202 Accepted` — `{ "data": WhatsAppPhoneNumberResource }` with
 `name_status: "PENDING_REVIEW"`.
 
+**Errors** — `409` if the current name is locked by an approved OBA, or the number has
+already changed its name 10 times in the last 30 days (tracked in
+`display_name.recent_change_timestamps`).
+
+> **Known limitation:** resolving a pending change into `verified_name`/`name_status`
+> happens via the `phone_number_name_update` webhook, which isn't implemented yet
+> (tracked separately) — a request currently stays `PENDING_REVIEW` until that lands, even
+> if Meta instant-approves it.
+
 ---
 
 #### `POST /phone-numbers/{phoneNumber}/oba`
@@ -559,7 +594,11 @@ Apply for an Official Business Account (green tick).
 `oba.status: "PENDING"`.
 
 **Errors** — `409` if the current `oba.status` doesn't allow a new application (e.g.
-`UNDER_REVIEW`).
+`UNDER_REVIEW`), or a 30-day cooldown after a rejection is still active.
+
+> **Known limitation:** resolving the submitted application into an approved/rejected
+> outcome happens via the `account_alerts` webhook, which isn't implemented yet (tracked
+> separately) — a submission stays `PENDING` until that lands.
 
 ---
 

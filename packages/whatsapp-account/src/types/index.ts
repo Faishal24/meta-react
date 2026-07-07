@@ -49,6 +49,24 @@ export interface WhatsAppAccount {
   phone_numbers?: WhatsAppPhoneNumber[];
 }
 
+/** Display-name change tracking; sub-keys are always present (null/[] when unset). */
+export interface DisplayNameInfo {
+  pending_name: string | null;
+  rejection_reason: string | null;
+  rejected_at: string | null;
+  /** ISO 8601 timestamps in the rolling 30-day window (10-changes/30-days cap). */
+  recent_change_timestamps: string[];
+}
+
+export interface PhoneNumberSettings {
+  identity_key_check: boolean;
+  storage: {
+    status: StorageStatus;
+    data_localization_region?: string | null;
+    default_media_ttl?: number | null;
+  };
+}
+
 export interface WhatsAppPhoneNumber {
   id: number;
   whatsapp_account_id: number;
@@ -61,9 +79,13 @@ export interface WhatsAppPhoneNumber {
   throughput_level: string | null;
   code_verification_status: string | null;
   status: string;
+  /** Derived from status (connected/flagged/rate_limited/restricted). */
+  registered: boolean;
   has_pin: boolean;
   registered_at: string | null;
   business_profile?: BusinessProfile | null;
+  display_name?: DisplayNameInfo | null;
+  settings?: PhoneNumberSettings | null;
   oba?: { status: string } | null;
   created_at: string | null;
   updated_at: string | null;

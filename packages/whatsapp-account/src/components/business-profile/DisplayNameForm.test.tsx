@@ -64,4 +64,67 @@ describe('DisplayNameForm', () => {
       ),
     );
   });
+
+  it('shows the pending name and disables submit while pending', () => {
+    render(
+      <DisplayNameForm
+        phoneNumberId="106"
+        verifiedName="Current"
+        nameStatus="APPROVED"
+        displayName={{
+          pending_name: 'New Pending',
+          rejection_reason: null,
+          rejected_at: null,
+          recent_change_timestamps: [],
+        }}
+        axios={mockAxios(vi.fn())}
+      />,
+    );
+
+    expect(screen.getByText('New Pending')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Submit' })).toHaveProperty(
+      'disabled',
+      true,
+    );
+  });
+
+  it('shows a rejection reason when the last change was rejected', () => {
+    render(
+      <DisplayNameForm
+        phoneNumberId="106"
+        verifiedName="Current"
+        nameStatus="DECLINED"
+        displayName={{
+          pending_name: null,
+          rejection_reason: 'Name violates policy',
+          rejected_at: '2026-07-01T00:00:00+00:00',
+          recent_change_timestamps: [],
+        }}
+        axios={mockAxios(vi.fn())}
+      />,
+    );
+
+    expect(screen.getByText('Name violates policy')).toBeTruthy();
+  });
+
+  it('blocks submit when the 10-change / 30-day limit is reached', () => {
+    // 10 recent timestamps (now-ish) → over the cap.
+    const now = new Date('2026-07-05T00:00:00Z').toISOString();
+    render(
+      <DisplayNameForm
+        phoneNumberId="106"
+        verifiedName="Current"
+        nameStatus="APPROVED"
+        displayName={{
+          pending_name: null,
+          rejection_reason: null,
+          rejected_at: null,
+          recent_change_timestamps: Array(10).fill(now),
+        }}
+        axios={mockAxios(vi.fn())}
+      />,
+    );
+
+    expect(screen.getByText(/Rename limit reached/)).toBeTruthy();
+  });
 });

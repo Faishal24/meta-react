@@ -62,6 +62,7 @@ function DetailBody({
             phoneNumberId={phoneNumber.phone_number_id}
             verifiedName={phoneNumber.verified_name}
             nameStatus={phoneNumber.name_status}
+            displayName={phoneNumber.display_name}
             obaStatus={phoneNumber.oba?.status}
             onSuccess={onUpdated}
             {...clientConfig}

@@ -43,6 +43,9 @@ export type { IdentityKeyCheckFormProps } from './phone-numbers/IdentityKeyCheck
 export { StorageForm } from './phone-numbers/StorageForm';
 export type { StorageFormProps, RegionOption } from './phone-numbers/StorageForm';
 
+export { PhoneNumberManagement } from './phone-numbers/PhoneNumberManagement';
+export type { PhoneNumberManagementProps } from './phone-numbers/PhoneNumberManagement';
+
 export { OnboardingButton } from './OnboardingButton';
 export type { OnboardingButtonProps } from './OnboardingButton';
 
