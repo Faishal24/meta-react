@@ -1,9 +1,6 @@
 packages:
-  - '.'
   - 'packages/*'
-
+  - 'playground'
 allowBuilds:
+  msw: true
   unrs-resolver: false
-
-publicHoistPattern:
-  - '@inertiajs/core'

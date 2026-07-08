@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { type AxiosInstance } from 'axios';
+import type {AxiosInstance} from 'axios';
 import { describe, expect, it, vi } from 'vitest';
 
-import { SummaryCard } from './SummaryCard';
 import { useBusinessProfileForm } from '../../hooks';
-import { type BusinessProfile } from '../../types';
+import type {BusinessProfile} from '../../types';
+import { SummaryCard } from './SummaryCard';
 
 const profile: BusinessProfile = {
   about: null,
@@ -23,6 +23,7 @@ function mockAxios(): AxiosInstance {
 
 function Harness({ obaStatus, businessVerified }: { obaStatus?: string; businessVerified: boolean }) {
   const form = useBusinessProfileForm({ phoneNumberId: '106', profile, axios: mockAxios() });
+
   return (
     <SummaryCard
       form={form}

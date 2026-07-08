@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
+import { useCallback, useEffect, useState } from 'react';
 
-import { resolveClient, type MetaAccountClientConfig } from '../client';
-import { type Paginated, type WhatsAppPhoneNumber } from '../types';
+import { resolveClient } from '../client';
+import type { MetaAccountClientConfig } from '../client';
+import type { Paginated, WhatsAppPhoneNumber } from '../types';
 
 export interface UsePhoneNumbersOptions extends MetaAccountClientConfig {
   page?: number;
@@ -25,20 +26,18 @@ export function usePhoneNumbers(
   const [pagination, setPagination] = useState<
     Paginated<WhatsAppPhoneNumber>['meta'] | null
   >(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<unknown>(null);
   const [reloadToken, setReloadToken] = useState<number>(0);
 
   const refetch = useCallback(() => {
+    setIsLoading(true);
     setReloadToken((token) => token + 1);
   }, []);
 
   useEffect(() => {
     const controller = new AbortController();
     const { instance, url } = resolveClient({ baseUrl, axios: axiosInstance });
-
-    setIsLoading(true);
-    setError(null);
 
     instance
       .get<Paginated<WhatsAppPhoneNumber>>(url('phone-numbers'), {
@@ -49,14 +48,17 @@ export function usePhoneNumbers(
         if (controller.signal.aborted) {
           return;
         }
+
         setPhoneNumbers(response.data.data);
         setPagination(response.data.meta);
+        setError(null);
         setIsLoading(false);
       })
       .catch((caught: unknown) => {
         if (axios.isCancel(caught) || controller.signal.aborted) {
           return;
         }
+
         setError(caught);
         setIsLoading(false);
       });

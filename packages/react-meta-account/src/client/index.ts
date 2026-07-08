@@ -1,4 +1,5 @@
-import axios, { type AxiosInstance } from 'axios';
+import axios from 'axios';
+import type {AxiosInstance} from 'axios';
 
 export interface MetaAccountClientConfig {
   /** Backend route prefix, matching `config('whatsapp.route.prefix')`. Default: `api/whatsapp`. */

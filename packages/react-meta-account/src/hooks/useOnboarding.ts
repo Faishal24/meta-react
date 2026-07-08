@@ -1,19 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { resolveClient, type MetaAccountClientConfig } from '../client';
+import { resolveClient  } from '../client';
+import type {MetaAccountClientConfig} from '../client';
 import {
   isFacebookOrigin,
   launchEmbeddedSignup,
   loadFacebookSdk,
 } from '../onboarding/facebookSdk';
-import {
-  type EmbeddedSignupSession,
-  type OnboardingConfig,
-  type ValidationErrors,
-  type WhatsAppAccount,
-  type WhatsAppPhoneNumber,
-} from '../types';
+import type {EmbeddedSignupSession, OnboardingConfig, ValidationErrors, WhatsAppAccount, WhatsAppPhoneNumber} from '../types';
 
 export interface UseOnboardingOptions extends MetaAccountClientConfig {
   onOnboarded?: (businessAccount: WhatsAppAccount) => void;
@@ -61,7 +56,9 @@ export function useOnboarding(
         if (cancelled) {
           return;
         }
+
         setConfig(response.data);
+
         return loadFacebookSdk(response.data.app_id);
       })
       .then(() => {
@@ -73,6 +70,7 @@ export function useOnboarding(
         if (axios.isCancel(caught) || cancelled) {
           return;
         }
+
         setError(caught);
       });
 
@@ -88,8 +86,10 @@ export function useOnboarding(
       if (!isFacebookOrigin(event.origin)) {
         return;
       }
+
       try {
         const parsed = JSON.parse(event.data);
+
         if (parsed.type === 'WA_EMBEDDED_SIGNUP' && parsed.data) {
           sessionRef.current = {
             waba_id: parsed.data.waba_id,
@@ -103,6 +103,7 @@ export function useOnboarding(
     };
 
     window.addEventListener('message', handleMessage);
+
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
@@ -122,6 +123,7 @@ export function useOnboarding(
       // The cast is needed because the `= null` above makes control-flow
       // analysis miss that the async `message` listener repopulates the ref.
       const session = sessionRef.current as EmbeddedSignupSession | null;
+
       if (!code || session === null) {
         return;
       }
@@ -165,6 +167,7 @@ export function useOnboarding(
         } else {
           setError(caught);
         }
+
         throw caught;
       } finally {
         setIsProcessing(false);

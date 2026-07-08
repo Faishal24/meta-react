@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { type MetaAccountClientConfig } from '../../client';
+import type {MetaAccountClientConfig} from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
-import { type WhatsAppPhoneNumber } from '../../types';
+import type {WhatsAppPhoneNumber} from '../../types';
 import { Switch } from '../ui/switch';
 
 export interface IdentityKeyCheckFormProps extends MetaAccountClientConfig {

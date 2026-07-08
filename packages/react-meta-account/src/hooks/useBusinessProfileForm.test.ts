@@ -1,9 +1,9 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
-import { type AxiosInstance } from 'axios';
+import { act, renderHook } from '@testing-library/react';
+import type {AxiosInstance} from 'axios';
 import { describe, expect, it, vi } from 'vitest';
 
+import type {BusinessProfile} from '../types';
 import { useBusinessProfileForm } from './useBusinessProfileForm';
-import { type BusinessProfile } from '../types';
 
 function mockAxios(patch: ReturnType<typeof vi.fn>): AxiosInstance {
   return { patch } as unknown as AxiosInstance;
@@ -25,6 +25,7 @@ function setup(patch = vi.fn().mockResolvedValue({ data: { data: {} } })) {
   const view = renderHook(() =>
     useBusinessProfileForm({ phoneNumberId: '106', profile, axios: instance }),
   );
+
   return { ...view, patch };
 }
 

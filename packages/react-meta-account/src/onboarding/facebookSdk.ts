@@ -35,6 +35,7 @@ export function loadFacebookSdk(appId: string): Promise<FacebookSdk> {
   return new Promise((resolve) => {
     if (window.FB) {
       resolve(window.FB);
+
       return;
     }
 
@@ -67,6 +68,7 @@ export function launchEmbeddedSignup(
 ): Promise<string | null> {
   return new Promise((resolve) => {
     const setup: Record<string, unknown> = {};
+
     if (businessPortfolioId) {
       setup.business = { id: businessPortfolioId };
     }

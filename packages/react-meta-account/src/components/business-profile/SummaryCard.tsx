@@ -7,15 +7,15 @@ import {
   MapPin,
   Tag,
 } from 'lucide-react';
-import { type ReactNode } from 'react';
+import type {ReactNode} from 'react';
 
-import { type useBusinessProfileForm } from '../../hooks';
+import type {useBusinessProfileForm} from '../../hooks';
 import { accountStageDisplay } from '../../lib/status-config';
-import { type VerticalOption } from './BusinessProfileForm';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Badge } from '../ui/badge';
 import { Card, CardContent } from '../ui/card';
 import { Separator } from '../ui/separator';
+import type {VerticalOption} from './BusinessProfileForm';
 
 export interface SummaryCardProps {
   form: ReturnType<typeof useBusinessProfileForm>;

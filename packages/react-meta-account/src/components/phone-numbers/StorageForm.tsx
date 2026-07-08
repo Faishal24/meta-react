@@ -1,11 +1,9 @@
 import { useState } from 'react';
 
-import { type MetaAccountClientConfig } from '../../client';
+import type {MetaAccountClientConfig} from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
-import {
-  type StorageStatus,
-  type WhatsAppPhoneNumber,
-} from '../../types';
+import type {StorageStatus, WhatsAppPhoneNumber} from '../../types';
+import { InputError } from '../InputError';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -16,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { InputError } from '../InputError';
 
 export interface RegionOption {
   value: string;

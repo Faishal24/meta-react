@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { type AxiosInstance } from 'axios';
+import type {AxiosInstance} from 'axios';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { OnboardingButton } from './OnboardingButton';
 import * as facebookSdk from '../onboarding/facebookSdk';
+import { OnboardingButton } from './OnboardingButton';
 
 function mockAxios(get: ReturnType<typeof vi.fn>): AxiosInstance {
   return { get } as unknown as AxiosInstance;

@@ -1,9 +1,9 @@
-import { type ReactNode } from 'react';
 import { LoaderCircle, RefreshCw } from 'lucide-react';
+import type {ReactNode} from 'react';
 
-import { type MetaAccountClientConfig } from '../client';
+import type {MetaAccountClientConfig} from '../client';
 import { useWhatsAppAccountActions } from '../hooks';
-import { type WhatsAppAccount } from '../types';
+import type {WhatsAppAccount} from '../types';
 import { Button } from './ui/button';
 
 export interface RefreshTokenButtonProps extends MetaAccountClientConfig {

@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { type MetaAccountClientConfig } from '../../client';
+import type {MetaAccountClientConfig} from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
-import {
-  type DisplayNameInfo,
-  type WhatsAppPhoneNumber,
-} from '../../types';
+import type {DisplayNameInfo, WhatsAppPhoneNumber} from '../../types';
+import { InputError } from '../InputError';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { InputError } from '../InputError';
 
 export interface DisplayNameFormProps extends MetaAccountClientConfig {
   phoneNumberId: string;
@@ -38,6 +35,7 @@ const WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 /** Count name changes within the rolling 30-day window. */
 function recentChangeCount(timestamps: string[]): number {
   const cutoff = Date.now() - WINDOW_MS;
+
   return timestamps.filter((ts) => new Date(ts).getTime() >= cutoff).length;
 }
 
@@ -53,7 +51,14 @@ export function DisplayNameForm({
   const actions = usePhoneNumberActions({ phoneNumberId, onSuccess, ...clientConfig });
   const [newName, setNewName] = useState('');
 
-  useEffect(() => setNewName(''), [phoneNumberId]);
+  // Reset the input when the target number changes, computed during render
+  // rather than in an effect (React "adjusting state when a prop changes").
+  const [seenId, setSeenId] = useState(phoneNumberId);
+
+  if (seenId !== phoneNumberId) {
+    setSeenId(phoneNumberId);
+    setNewName('');
+  }
 
   const renameDisabled = obaStatus === 'APPROVED';
   const pendingName = displayName?.pending_name ?? null;

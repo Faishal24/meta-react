@@ -63,6 +63,10 @@ export default [
         },
         rules: {
             '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+            ],
             '@typescript-eslint/consistent-type-imports': [
                 'error',
                 {
@@ -107,16 +111,9 @@ export default [
     },
     {
         ignores: [
-            'vendor',
             'node_modules',
-            'public',
-            'bootstrap/ssr',
-            'tailwind.config.js',
-            'vite.config.ts',
-            'resources/js/actions/**',
-            'resources/js/components/ui/*',
-            'resources/js/routes/**',
-            'resources/js/wayfinder/**',
+            '**/dist/**',
+            'packages/*/src/components/ui/**',
         ],
     },
     prettier, // Turn off all rules that might conflict with Prettier
