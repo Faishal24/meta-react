@@ -2,7 +2,7 @@
 
 React components and hooks for Meta WhatsApp account management: embedded signup onboarding, WABA management, and phone number lifecycle.
 
-Consumes the `officemap/meta-account` backend API (see `docs/contract/api-contract.md` at the repo root). Framework-agnostic: plain React + axios, no Inertia dependency.
+Consumes the `officemap/meta-account` backend API (see the OpenAPI spec `v1.yaml`, a sibling of this repo). Framework-agnostic: plain React + axios, no Inertia dependency.
 
 ## Installation
 
