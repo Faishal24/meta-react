@@ -11,6 +11,11 @@ import {
 import type {EmbeddedSignupSession, OnboardingConfig, ValidationErrors, WhatsAppAccount, WhatsAppPhoneNumber} from '../types';
 
 export interface UseOnboardingOptions extends MetaAccountClientConfig {
+  /**
+   * Pre-fills the signup popup with a business portfolio. The host supplies it
+   * (e.g. from the active context) — the config endpoint no longer returns it.
+   */
+  businessPortfolioId?: string | null;
   onOnboarded?: (businessAccount: WhatsAppAccount) => void;
   onPhoneNumberAdded?: (phoneNumber: WhatsAppPhoneNumber) => void;
 }
@@ -31,6 +36,7 @@ export function useOnboarding(
   const {
     baseUrl,
     axios: axiosInstance,
+    businessPortfolioId,
     onOnboarded,
     onPhoneNumberAdded,
   } = options;
@@ -117,7 +123,7 @@ export function useOnboarding(
       const code = await launchEmbeddedSignup(
         window.FB,
         config.configuration_id,
-        config.business_portfolio_id,
+        businessPortfolioId,
       );
 
       // The cast is needed because the `= null` above makes control-flow
@@ -173,7 +179,14 @@ export function useOnboarding(
         setIsProcessing(false);
       }
     },
-    [config, baseUrl, axiosInstance, onOnboarded, onPhoneNumberAdded],
+    [
+      config,
+      baseUrl,
+      axiosInstance,
+      businessPortfolioId,
+      onOnboarded,
+      onPhoneNumberAdded,
+    ],
   );
 
   const launchOnboarding = useCallback(() => launch('onboarding'), [launch]);
