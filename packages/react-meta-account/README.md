@@ -49,7 +49,7 @@ Every piece/container is built on these; use them directly for a fully custom UI
 
 ## Development
 
-This package lives in the `whatsapp-components` dev monorepo and is developed against the Laravel host app at the repo root.
+This package lives in the `meta-react` dev monorepo and is developed against the Laravel host app at the repo root.
 
 ```bash
 pnpm --filter @officemap/react-meta-account build   # compile src/ -> dist/
