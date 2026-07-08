@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { type MetaAccountClientConfig } from '../client';
-import {
-  type BusinessProfile,
-  type UpdateBusinessProfilePayload,
-  type WhatsAppPhoneNumber,
-} from '../types';
+import type {MetaAccountClientConfig} from '../client';
+import type {BusinessProfile, UpdateBusinessProfilePayload, WhatsAppPhoneNumber} from '../types';
 import { usePhoneNumberActions } from './usePhoneNumberActions';
 
 export interface UseBusinessProfileFormOptions extends MetaAccountClientConfig {
@@ -44,6 +40,8 @@ export function useBusinessProfileForm(options: UseBusinessProfileFormOptions) {
   const [photoPreview, setPhotoPreview] = useState<string | null>(
     profile.profile_picture_url,
   );
+  const [seenProfile, setSeenProfile] = useState(profile);
+
   const objectUrlRef = useRef<string | null>(null);
 
   const revokePreview = useCallback(() => {
@@ -53,14 +51,13 @@ export function useBusinessProfileForm(options: UseBusinessProfileFormOptions) {
     }
   }, []);
 
-  // Re-seed when the target profile changes (e.g. switching numbers).
-  useEffect(() => {
+  // Re-seed the form when the target profile changes (e.g. switching numbers),
+  // computed during render rather than in an effect.
+  if (seenProfile !== profile) {
+    setSeenProfile(profile);
     setState(toFormState(profile));
-    revokePreview();
     setPhotoPreview(profile.profile_picture_url);
-  }, [profile, revokePreview]);
-
-  useEffect(() => revokePreview, [revokePreview]);
+  }
 
   const setField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setState((prev) => ({ ...prev, [key]: value }));
@@ -113,6 +110,10 @@ export function useBusinessProfileForm(options: UseBusinessProfileFormOptions) {
 
     return actions.updateBusinessProfile(payload);
   };
+
+  // Revoke a stale object URL after the profile changed, and on unmount — the
+  // ref touch belongs in an effect, not in render.
+  useEffect(() => revokePreview, [profile, revokePreview]);
 
   return {
     about: state.about,

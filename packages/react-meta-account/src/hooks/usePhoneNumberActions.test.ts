@@ -1,5 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
-import axios, { type AxiosInstance } from 'axios';
+import axios from 'axios';
+import type {AxiosInstance} from 'axios';
 import { describe, expect, it, vi } from 'vitest';
 
 import { usePhoneNumberActions } from './usePhoneNumberActions';

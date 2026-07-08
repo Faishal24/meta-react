@@ -1,17 +1,9 @@
-import { useCallback, useState } from 'react';
 import axios from 'axios';
+import { useCallback, useState } from 'react';
 
-import { resolveClient, type MetaAccountClientConfig } from '../client';
-import {
-  type ObaApplicationPayload,
-  type UpdateBusinessProfilePayload,
-  type UpdateDisplayNamePayload,
-  type UpdateIdentityKeyCheckPayload,
-  type UpdateStoragePayload,
-  type UpdateTwoStepPinPayload,
-  type ValidationErrors,
-  type WhatsAppPhoneNumber,
-} from '../types';
+import { resolveClient  } from '../client';
+import type {MetaAccountClientConfig} from '../client';
+import type {ObaApplicationPayload, UpdateBusinessProfilePayload, UpdateDisplayNamePayload, UpdateIdentityKeyCheckPayload, UpdateStoragePayload, UpdateTwoStepPinPayload, ValidationErrors, WhatsAppPhoneNumber} from '../types';
 
 export interface UsePhoneNumberActionsOptions extends MetaAccountClientConfig {
   phoneNumberId: string;
@@ -59,6 +51,7 @@ function toBusinessProfileBody(
     if (value === undefined) {
       continue;
     }
+
     if (key === 'photo' && value instanceof File) {
       body.append('photo', value);
     } else if (key === 'websites' && Array.isArray(value)) {
@@ -128,6 +121,7 @@ export function usePhoneNumberActions(
         } else {
           setError(caught);
         }
+
         throw caught;
       } finally {
         setIsProcessing(false);

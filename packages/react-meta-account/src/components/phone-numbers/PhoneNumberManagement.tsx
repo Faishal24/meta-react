@@ -1,10 +1,9 @@
 import { Database, KeyRound, RefreshCw, ShieldCheck } from 'lucide-react';
 
-import { type MetaAccountClientConfig } from '../../client';
+import type {MetaAccountClientConfig} from '../../client';
 import { usePhoneNumber, usePhoneNumberActions } from '../../hooks';
-import { type WhatsAppPhoneNumber } from '../../types';
+import type {WhatsAppPhoneNumber} from '../../types';
 import { SectionCard } from '../SectionCard';
-import { Button } from '../ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,9 +15,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../ui/alert-dialog';
+import { Button } from '../ui/button';
 import { Skeleton } from '../ui/skeleton';
 import { IdentityKeyCheckForm } from './IdentityKeyCheckForm';
-import { StorageForm, type RegionOption } from './StorageForm';
+import { StorageForm  } from './StorageForm';
+import type {RegionOption} from './StorageForm';
 import { TwoStepPinForm } from './TwoStepPinForm';
 
 export interface PhoneNumberManagementProps extends MetaAccountClientConfig {

@@ -1,10 +1,11 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { type AxiosInstance } from 'axios';
+import type {AxiosInstance} from 'axios';
 import { describe, expect, it, vi } from 'vitest';
 
-import { BusinessProfileForm, type VerticalOption } from './BusinessProfileForm';
 import { useBusinessProfileForm } from '../../hooks';
-import { type BusinessProfile } from '../../types';
+import type {BusinessProfile} from '../../types';
+import { BusinessProfileForm  } from './BusinessProfileForm';
+import type {VerticalOption} from './BusinessProfileForm';
 
 const profile: BusinessProfile = {
   about: 'We ship maps.',
@@ -22,6 +23,7 @@ const verticals: VerticalOption[] = [{ value: 'PROF_SERVICES', label: 'Professio
 // Thin harness so the form component receives a real hook result.
 function Harness({ axios }: { axios: AxiosInstance }) {
   const form = useBusinessProfileForm({ phoneNumberId: '106', profile, axios });
+
   return <BusinessProfileForm form={form} verticals={verticals} />;
 }
 

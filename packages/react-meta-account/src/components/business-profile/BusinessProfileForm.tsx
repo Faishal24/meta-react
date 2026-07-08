@@ -9,10 +9,11 @@ import {
   Text,
   X,
 } from 'lucide-react';
-import { type ReactNode } from 'react';
+import type {ReactNode} from 'react';
 
-import { type useBusinessProfileForm } from '../../hooks';
+import type {useBusinessProfileForm} from '../../hooks';
 import { cn } from '../../lib/utils';
+import { InputError } from '../InputError';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -25,7 +26,6 @@ import {
 } from '../ui/select';
 import { Separator } from '../ui/separator';
 import { Textarea } from '../ui/textarea';
-import { InputError } from '../InputError';
 
 export interface VerticalOption {
   value: string;

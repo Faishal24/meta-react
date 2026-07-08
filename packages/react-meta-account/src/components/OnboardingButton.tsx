@@ -1,12 +1,9 @@
-import { type ReactNode } from 'react';
 import { Plus } from 'lucide-react';
+import type {ReactNode} from 'react';
 
-import { type MetaAccountClientConfig } from '../client';
+import type {MetaAccountClientConfig} from '../client';
 import { useOnboarding } from '../hooks';
-import {
-  type WhatsAppAccount,
-  type WhatsAppPhoneNumber,
-} from '../types';
+import type {WhatsAppAccount, WhatsAppPhoneNumber} from '../types';
 import { Button } from './ui/button';
 
 export interface OnboardingButtonProps extends MetaAccountClientConfig {

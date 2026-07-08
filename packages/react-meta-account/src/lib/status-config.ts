@@ -1,4 +1,4 @@
-import { type TokenStatus } from '../types';
+import type {TokenStatus} from '../types';
 
 export type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
 
@@ -30,6 +30,7 @@ export function reviewStatusDisplay(status: string | null): StatusDisplay | null
   if (!status) {
     return null;
   }
+
   return REVIEW_STATUS[status] ?? { label: status, variant: 'outline' };
 }
 
@@ -43,9 +44,11 @@ const HEALTH_VARIANT: Record<string, BadgeVariant> = {
 
 export function healthStatusDisplay(health: Record<string, unknown> | null): StatusDisplay | null {
   const capability = health?.can_send_message;
+
   if (typeof capability !== 'string') {
     return null;
   }
+
   return {
     label: capability.charAt(0).toUpperCase() + capability.slice(1),
     variant: HEALTH_VARIANT[capability] ?? 'outline',

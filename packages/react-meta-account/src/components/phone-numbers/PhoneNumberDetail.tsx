@@ -1,12 +1,13 @@
 import { AtSign } from 'lucide-react';
 
-import { type MetaAccountClientConfig } from '../../client';
+import type {MetaAccountClientConfig} from '../../client';
 import { useBusinessProfileForm, usePhoneNumber } from '../../hooks';
-import { type BusinessProfile, type WhatsAppPhoneNumber } from '../../types';
-import { BusinessProfileForm, type VerticalOption } from '../business-profile/BusinessProfileForm';
+import type {BusinessProfile, WhatsAppPhoneNumber} from '../../types';
+import { BusinessProfileForm  } from '../business-profile/BusinessProfileForm';
+import type {VerticalOption} from '../business-profile/BusinessProfileForm';
 import { DisplayNameForm } from '../business-profile/DisplayNameForm';
-import { SectionCard } from '../SectionCard';
 import { SummaryCard } from '../business-profile/SummaryCard';
+import { SectionCard } from '../SectionCard';
 import { Skeleton } from '../ui/skeleton';
 
 export interface PhoneNumberDetailProps extends MetaAccountClientConfig {

@@ -1,11 +1,17 @@
-import { type ReactNode } from 'react';
 import { CloudSync, LoaderCircle } from 'lucide-react';
+import type {ReactNode} from 'react';
 
-import { type MetaAccountClientConfig } from '../client';
+import type {MetaAccountClientConfig} from '../client';
 import { useBusinessAccounts } from '../hooks';
-import { type WhatsAppAccount } from '../types';
+import {
+  TOKEN_STATUS,
+  healthStatusDisplay,
+  reviewStatusDisplay,
+} from '../lib/status-config';
+import type {WhatsAppAccount} from '../types';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
+import { Skeleton } from './ui/skeleton';
 import {
   Table,
   TableBody,
@@ -14,12 +20,6 @@ import {
   TableHeader,
   TableRow,
 } from './ui/table';
-import { Skeleton } from './ui/skeleton';
-import {
-  TOKEN_STATUS,
-  healthStatusDisplay,
-  reviewStatusDisplay,
-} from '../lib/status-config';
 
 export interface BusinessAccountListProps extends MetaAccountClientConfig {
   page?: number;

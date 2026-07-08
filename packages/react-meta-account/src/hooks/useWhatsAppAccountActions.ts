@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
-import axios from 'axios';
 
-import { resolveClient, type MetaAccountClientConfig } from '../client';
-import { type WhatsAppAccount } from '../types';
+import { resolveClient  } from '../client';
+import type {MetaAccountClientConfig} from '../client';
+import type {WhatsAppAccount} from '../types';
 
 export interface UseWhatsAppAccountActionsOptions
   extends MetaAccountClientConfig {
@@ -45,6 +45,7 @@ export function useWhatsAppAccountActions(
         return updated;
       } catch (caught: unknown) {
         setError(caught);
+
         throw caught;
       } finally {
         setIsProcessing(false);

@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
+import { useCallback, useEffect, useState } from 'react';
 
-import { resolveClient, type MetaAccountClientConfig } from '../client';
-import { type WhatsAppPhoneNumber } from '../types';
+import { resolveClient  } from '../client';
+import type {MetaAccountClientConfig} from '../client';
+import type {WhatsAppPhoneNumber} from '../types';
 
 export interface UsePhoneNumberOptions extends MetaAccountClientConfig {
   /** null/undefined keeps the hook idle (no request) — e.g. before a selection. */
@@ -24,27 +25,32 @@ export function usePhoneNumber(
   const [phoneNumber, setPhoneNumber] = useState<WhatsAppPhoneNumber | null>(
     null,
   );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(Boolean(phoneNumberId));
   const [error, setError] = useState<unknown>(null);
   const [reloadToken, setReloadToken] = useState<number>(0);
+  const [seenId, setSeenId] = useState(phoneNumberId);
 
   const refetch = useCallback(() => {
+    setIsLoading(true);
     setReloadToken((token) => token + 1);
   }, []);
 
+  // Reset when the target id changes, computed during render. Going idle
+  // (id null) clears the number; a new id shows loading until the fetch lands.
+  if (seenId !== phoneNumberId) {
+    setSeenId(phoneNumberId);
+    setPhoneNumber(null);
+    setError(null);
+    setIsLoading(Boolean(phoneNumberId));
+  }
+
   useEffect(() => {
     if (!phoneNumberId) {
-      setPhoneNumber(null);
-      setError(null);
-      setIsLoading(false);
       return;
     }
 
     const controller = new AbortController();
     const { instance, url } = resolveClient({ baseUrl, axios: axiosInstance });
-
-    setIsLoading(true);
-    setError(null);
 
     instance
       .get<{ data: WhatsAppPhoneNumber }>(
@@ -57,13 +63,16 @@ export function usePhoneNumber(
         if (controller.signal.aborted) {
           return;
         }
+
         setPhoneNumber(response.data.data);
+        setError(null);
         setIsLoading(false);
       })
       .catch((caught: unknown) => {
         if (axios.isCancel(caught) || controller.signal.aborted) {
           return;
         }
+
         setError(caught);
         setIsLoading(false);
       });

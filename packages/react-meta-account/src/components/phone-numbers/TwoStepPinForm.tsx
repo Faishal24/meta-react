@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import { type MetaAccountClientConfig } from '../../client';
+import type {MetaAccountClientConfig} from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
-import { type WhatsAppPhoneNumber } from '../../types';
+import type {WhatsAppPhoneNumber} from '../../types';
+import { InputError } from '../InputError';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { InputError } from '../InputError';
 
 export interface TwoStepPinFormProps extends MetaAccountClientConfig {
   phoneNumberId: string;

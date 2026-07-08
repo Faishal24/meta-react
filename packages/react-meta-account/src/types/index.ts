@@ -1,7 +1,7 @@
 /**
  * Types mirroring the backend API contract.
  *
- * Source of truth: docs/contract/api-contract.md (repo root).
+ * Source of truth: the backend OpenAPI spec (v1.yaml, sibling of this repo).
  * Timestamps are ISO 8601 strings. Enum-cast fields arrive as plain strings.
  * Secrets (business_token, pin) never appear in any response, so they are
  * intentionally absent here.
@@ -97,7 +97,7 @@ export interface ValidationErrors {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Mutation request payloads (per docs/contract/api-contract.md)              */
+/* Mutation request payloads (per the v1.yaml OpenAPI spec)                   */
 /* -------------------------------------------------------------------------- */
 
 /** `PATCH /phone-numbers/{phoneNumber}/two-step-pin` — 6 digits. */

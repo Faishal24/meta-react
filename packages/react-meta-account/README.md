@@ -2,7 +2,7 @@
 
 React components and hooks for Meta WhatsApp account management: embedded signup onboarding, WABA management, and phone number lifecycle.
 
-Consumes the `officemap/meta-account` backend API (see `docs/contract/api-contract.md` at the repo root). Framework-agnostic: plain React + axios, no Inertia dependency.
+Consumes the `officemap/meta-account` backend API (see the OpenAPI spec `v1.yaml`, a sibling of this repo). Framework-agnostic: plain React + axios, no Inertia dependency.
 
 ## Installation
 
@@ -49,10 +49,11 @@ Every piece/container is built on these; use them directly for a fully custom UI
 
 ## Development
 
-This package lives in the `meta-react` dev monorepo and is developed against the Laravel host app at the repo root.
+This package lives in the `meta-react` packages-only monorepo. Components are mounted in the `playground/` Vite app (with mocked network via MSW) during development.
 
 ```bash
 pnpm --filter @officemap/react-meta-account build   # compile src/ -> dist/
 pnpm --filter @officemap/react-meta-account dev     # watch mode
 pnpm --filter @officemap/react-meta-account test    # vitest
+pnpm --filter playground dev                         # run the component playground
 ```

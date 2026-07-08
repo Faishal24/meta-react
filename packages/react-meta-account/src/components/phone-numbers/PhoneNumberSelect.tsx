@@ -1,6 +1,6 @@
-import { type MetaAccountClientConfig } from '../../client';
+import type {MetaAccountClientConfig} from '../../client';
 import { usePhoneNumbers } from '../../hooks';
-import { type WhatsAppPhoneNumber } from '../../types';
+import type {WhatsAppPhoneNumber} from '../../types';
 import {
   Select,
   SelectContent,
@@ -28,6 +28,7 @@ export function PhoneNumberSelect({
 
   const handleChange = (value: string) => {
     const number = phoneNumbers.find((item) => item.phone_number_id === value);
+
     if (number) {
       onSelect(number);
     }

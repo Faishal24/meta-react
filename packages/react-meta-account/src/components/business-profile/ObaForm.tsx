@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
-import { type MetaAccountClientConfig } from '../../client';
+import type {MetaAccountClientConfig} from '../../client';
 import { usePhoneNumberActions } from '../../hooks';
 import { obaStatusDisplay } from '../../lib/status-config';
-import { type WhatsAppPhoneNumber } from '../../types';
+import type {WhatsAppPhoneNumber} from '../../types';
+import { InputError } from '../InputError';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
-import { InputError } from '../InputError';
 
 export interface ObaFormProps extends MetaAccountClientConfig {
   phoneNumberId: string;
