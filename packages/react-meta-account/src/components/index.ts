@@ -13,6 +13,12 @@ export type { BusinessAccountListProps } from './BusinessAccountList';
 export { PhoneNumberSelect } from './phone-numbers/PhoneNumberSelect';
 export type { PhoneNumberSelectProps } from './phone-numbers/PhoneNumberSelect';
 
+export { PhoneNumberSwitcher } from './phone-numbers/PhoneNumberSwitcher';
+export type { PhoneNumberSwitcherProps } from './phone-numbers/PhoneNumberSwitcher';
+
+export { PortfolioSwitcher } from './phone-numbers/PortfolioSwitcher';
+export type { PortfolioSwitcherProps } from './phone-numbers/PortfolioSwitcher';
+
 export { SectionCard } from './SectionCard';
 export type { SectionCardProps } from './SectionCard';
 

@@ -12,6 +12,8 @@ export interface OnboardingButtonProps extends MetaAccountClientConfig {
    * `add-number` adds a subsequent number to an existing WABA.
    */
   mode?: 'onboarding' | 'add-number';
+  /** Pre-fills the signup popup with a business portfolio (from the active context). */
+  businessPortfolioId?: string | null;
   onOnboarded?: (businessAccount: WhatsAppAccount) => void;
   onPhoneNumberAdded?: (phoneNumber: WhatsAppPhoneNumber) => void;
   children?: ReactNode;
@@ -19,13 +21,19 @@ export interface OnboardingButtonProps extends MetaAccountClientConfig {
 
 export function OnboardingButton({
   mode = 'onboarding',
+  businessPortfolioId,
   onOnboarded,
   onPhoneNumberAdded,
   children,
   ...clientConfig
 }: OnboardingButtonProps) {
   const { isReady, isProcessing, launchOnboarding, launchAddPhoneNumber } =
-    useOnboarding({ onOnboarded, onPhoneNumberAdded, ...clientConfig });
+    useOnboarding({
+      businessPortfolioId,
+      onOnboarded,
+      onPhoneNumberAdded,
+      ...clientConfig,
+    });
 
   const launch = mode === 'add-number' ? launchAddPhoneNumber : launchOnboarding;
   const label = mode === 'add-number' ? 'Add number' : 'Connect WhatsApp';

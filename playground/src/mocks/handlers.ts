@@ -42,6 +42,27 @@ const NUMBER = {
   oba: { status: 'NOT_STARTED' },
 };
 
+const SECOND_NUMBER = {
+  ...NUMBER,
+  id: 35,
+  phone_number_id: '106540352242999',
+  display_phone_number: '+62 811-2222-3333',
+  verified_name: 'Acme Support',
+};
+
+const PORTFOLIOS = [
+  {
+    business_portfolio_id: '102938475610293',
+    name: 'Acme Inc.',
+    verification_status: 'verified',
+  },
+  {
+    business_portfolio_id: '102938475610777',
+    name: 'Acme Labs',
+    verification_status: null,
+  },
+];
+
 const base = '/api/whatsapp';
 
 export const handlers = [
@@ -49,13 +70,41 @@ export const handlers = [
     HttpResponse.json({ data: [ACCOUNT], meta: PAGINATION }),
   ),
   http.get(`${base}/phone-numbers`, () =>
-    HttpResponse.json({ data: [NUMBER], meta: PAGINATION }),
+    HttpResponse.json({
+      data: [NUMBER, SECOND_NUMBER],
+      meta: { ...PAGINATION, total: 2 },
+    }),
   ),
   http.get(`${base}/phone-numbers/:id`, () =>
     HttpResponse.json({ data: NUMBER }),
   ),
   http.get(`${base}/onboarding/config`, () =>
     HttpResponse.json({ app_id: '123', configuration_id: '988' }),
+  ),
+  http.get(`${base}/context`, () =>
+    HttpResponse.json({
+      business_portfolio_id: PORTFOLIOS[0].business_portfolio_id,
+      waba_id: ACCOUNT.waba_id,
+      phone_number_id: NUMBER.phone_number_id,
+      available_portfolios: PORTFOLIOS,
+    }),
+  ),
+  // Switching echoes a context pointing at the requested number.
+  http.patch(`${base}/context/phone-number/:id`, ({ params }) =>
+    HttpResponse.json({
+      business_portfolio_id: PORTFOLIOS[0].business_portfolio_id,
+      waba_id: ACCOUNT.waba_id,
+      phone_number_id: params.id,
+      available_portfolios: PORTFOLIOS,
+    }),
+  ),
+  http.patch(`${base}/context/portfolio/:id`, ({ params }) =>
+    HttpResponse.json({
+      business_portfolio_id: params.id,
+      waba_id: ACCOUNT.waba_id,
+      phone_number_id: NUMBER.phone_number_id,
+      available_portfolios: PORTFOLIOS,
+    }),
   ),
   // Mutations echo the number back so components see a success.
   http.patch(`${base}/phone-numbers/:id/*`, () =>

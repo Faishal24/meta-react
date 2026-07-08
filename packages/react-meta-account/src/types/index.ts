@@ -157,13 +157,12 @@ export interface UpdateStoragePayload {
 
 /**
  * `GET /onboarding/config` — bootstrap data for the Meta signup widget.
- * Plain object (no `data` wrapper).
+ * Plain object (no `data` wrapper). The active portfolio now lives on
+ * `GET /context` (ContextResponse), not here.
  */
 export interface OnboardingConfig {
   app_id: string;
   configuration_id: string;
-  /** Optional: pre-fills the signup popup with the caller's business portfolio. */
-  business_portfolio_id?: string | null;
 }
 
 /** `POST /onboarding` — first-time onboarding (create WABA + first number). */
@@ -188,6 +187,29 @@ export interface EmbeddedSignupSession {
   waba_id: string;
   phone_number_id: string;
   business_id?: string;
+}
+
+/** A portfolio the caller may switch to, with its display name and status. */
+export interface AvailablePortfolio {
+  business_portfolio_id: string;
+  name: string | null;
+  verification_status: string | null;
+}
+
+/**
+ * `GET /context` — the caller's active number (with WABA + portfolio derived
+ * from it) and the portfolios they may switch between. All nullable fields are
+ * null before a number is selected. Plain object (no `data` wrapper).
+ */
+export interface ContextResponse {
+  /** The active number's portfolio, or null when nothing is selected. */
+  business_portfolio_id: string | null;
+  /** The active number's WABA (WABA follows the number), or null. */
+  waba_id: string | null;
+  /** The active phone number, or null when nothing is selected. */
+  phone_number_id: string | null;
+  /** Portfolios the caller may switch between, from the tenant scope. */
+  available_portfolios: AvailablePortfolio[];
 }
 
 /** Laravel paginated collection envelope. */
