@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@officemap/react-meta-account": "workspace:*",
+    "@faishal24/react-meta-account": "workspace:*",
     "axios": "^1.18.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"

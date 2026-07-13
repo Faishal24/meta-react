@@ -1,7 +1,12 @@
 {
   "name": "@faishal24/react-meta-account",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Meta WhatsApp account management components: embedded signup onboarding, WABA, and phone number management.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Faishal24/meta-react.git",
+    "directory": "packages/react-meta-account"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
