@@ -1,7 +1,7 @@
 {
-  "name": "@faishal24/react-meta-account",
+  "name": "@faishal24/react-whatsapp-messaging",
   "version": "0.1.0",
-  "description": "Meta WhatsApp account management components: embedded signup onboarding, WABA, and phone number management.",
+  "description": "Meta WhatsApp messaging components: conversations, message threads, composer, and interactive/media bubbles.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
